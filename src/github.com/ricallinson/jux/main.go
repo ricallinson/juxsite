@@ -16,6 +16,7 @@ func registerDefaultComponents(cfg *AppCfg) {
 	})
 
 	cfg.RegisterComponent("article", func(req *f.Request, res *f.Response, next func()) {
+		res.Locals["title"] = "Article"
 		res.Send(req.Params["juxcomp"] + "/" + req.Params["juxview"])
 	})
 
@@ -40,7 +41,8 @@ func Start(cfg *AppCfg) {
 
 	app.Locals["baseUrl"] = cfg.Site.BaseUrl
 	app.Locals["siteName"] = cfg.Site.Name
-	app.Locals["SiteDescription"] = cfg.Site.Description
+	app.Locals["title"] = cfg.Site.Name
+	app.Locals["description"] = cfg.Site.Description
 	app.Locals["lang"] = cfg.Site.Lang
 	app.Locals["direction"] = cfg.Site.Direction
 	app.Locals["year"] = fmt.Sprint(time.Now().Year())
