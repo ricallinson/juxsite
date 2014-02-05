@@ -8,31 +8,6 @@ import (
 	"time"
 )
 
-// Register all default components.
-func registerDefaultComponents(cfg *AppCfg) {
-
-	cfg.RegisterComponent("a", func(req *f.Request, res *f.Response, next func()) {
-		res.Send("Nav Bar")
-	})
-
-	cfg.RegisterComponent("b", func(req *f.Request, res *f.Response, next func()) {
-		res.End("Extra")
-	})
-
-	cfg.RegisterComponent("c", func(req *f.Request, res *f.Response, next func()) {
-		res.End("Footer")
-	})
-
-	cfg.RegisterComponent("article", func(req *f.Request, res *f.Response, next func()) {
-		res.Locals["title"] = "Article"
-		res.Send(req.Params["juxcomp"] + "/" + req.Params["juxview"])
-	})
-
-	cfg.RegisterComponent("error", func(req *f.Request, res *f.Response, next func()) {
-		res.End("Error: Component not found.")
-	})
-}
-
 func Start(cfg *AppCfg) {
 
 	app := f.CreateServer()
@@ -60,16 +35,16 @@ func Start(cfg *AppCfg) {
 	app.Get("/", func(req *f.Request, res *f.Response, next func()) {
 		req.Params["juxcomp"] = cfg.Defaults.Component
 		req.Params["juxview"] = cfg.Defaults.ComponentView
-		Render(req, res, next, cfg)
+		Render(req, res, next, cfg, app)
 	})
 
 	app.Get("/:juxcomp", func(req *f.Request, res *f.Response, next func()) {
 		req.Params["juxview"] = cfg.Defaults.ComponentView
-		Render(req, res, next, cfg)
+		Render(req, res, next, cfg, app)
 	})
 
 	app.Get("/:juxcomp/:juxview", func(req *f.Request, res *f.Response, next func()) {
-		Render(req, res, next, cfg)
+		Render(req, res, next, cfg, app)
 	})
 
 	http.Handle("/", app)

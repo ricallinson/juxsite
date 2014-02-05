@@ -19,32 +19,37 @@
 
 	{{#position-01}}
 	<!-- Nav Bar -->
-	<div>{{position-01}}</div>
+	<div>{{{position-01}}}</div>
 	{{/position-01}}
 
 	{{#position-02}}
 	<!-- Sidebar -->
-	<div>{{position-02}}</div>
+	<div>{{{position-02}}}</div>
 	{{/position-02}}
 
 	{{#maincontent}}
 	<!-- Content -->
-	<div>{{maincontent}}</div>
+	<div>{{{maincontent}}}</div>
 	{{/maincontent}}
 
-	{{#position-04}}
+	{{#position-03}}
 	<!-- Right Sidebar -->
-	<div>{{position-04}}</div>
-	{{/position-04}}
+	<div>{{{position-03}}}</div>
+	{{/position-03}}
 
 	<!-- Footer -->
 	<div>
-		{{#position-05}}
-		{{position-05}}
-		{{/position-05}}
+		{{#position-04}}
+		{{{position-04}}}
+		{{/position-04}}
 		<p>&copy; {{siteName}} {{year}}</p>
 	</div>
 </div>
-</body>
 {{blockbottom}}
+{{#debug}}
+<pre>
+{{{debug}}}
+</pre>
+{{/debug}}
+</body>
 </html>

@@ -10,6 +10,7 @@ type Components map[string]func(*f.Request, *f.Response, func())
 type AppCfg struct {
 	// Site configuration.
 	Site struct {
+		Debug       bool
 		BaseUrl     string
 		Name        string
 		Description string
@@ -33,6 +34,7 @@ type AppCfg struct {
 
 func (this *AppCfg) Load(file string) {
 
+	this.Site.Debug = false
 	this.Site.BaseUrl = "/"
 	this.Site.Name = "Jux"
 	this.Site.Description = ""
@@ -49,7 +51,7 @@ func (this *AppCfg) Load(file string) {
 	// Create the default layout.
 	this.Layouts["default"] = map[string][]string{
 		"position-01": {"a", "b"},
-		"position-05": {"c"},
+		"position-04": {"c", "f"},
 	}
 
 	// Instantiate the Map of all available components.
