@@ -5,5 +5,7 @@ import (
 )
 
 func init() {
-	jux.Start()
+	cfg := &jux.AppCfg{}
+	cfg.Load("site.yaml")
+	jux.Start(cfg)
 }

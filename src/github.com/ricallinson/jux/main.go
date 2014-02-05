@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func Start() {
+func Start(cfg *AppCfg) {
 
 	app := f.CreateServer()
 
@@ -15,9 +15,6 @@ func Start() {
 	app.Use(f.Static())
 
 	app.Engine(".html", fmustache.Make())
-
-	cfg := &AppCfg{}
-	cfg.Load("site.yaml")
 
 	app.Locals["title"] = cfg.PageTitle
 
