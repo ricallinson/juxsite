@@ -1,6 +1,6 @@
 # Jux Site
 
-Requires you to have [Go1.2](http://golang.org/doc/install) and the [Google App Engine Go Runtime](https://developers.google.com/appengine/docs/go/) installed in __~/Go_.
+Requires you to have [Go1.2](http://golang.org/doc/install) and the [Google App Engine Go Runtime](https://developers.google.com/appengine/docs/go/) installed in __~/Go__.
 
 ## Install
 
