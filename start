@@ -1,0 +1,3 @@
+export GOPATH=~/Go/apps/juxsite
+
+~/Go/appengine/goapp serve ./http

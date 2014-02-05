@@ -1,0 +1,15 @@
+[submodule "src/github.com/hoisie/mustache"]
+	path = src/github.com/hoisie/mustache
+	url = https://github.com/hoisie/mustache.git
+[submodule "src/github.com/ricallinson/forgery"]
+	path = src/github.com/ricallinson/forgery
+	url = https://github.com/ricallinson/forgery.git
+[submodule "src/github.com/ricallinson/fmustache"]
+	path = src/github.com/ricallinson/fmustache
+	url = https://github.com/ricallinson/fmustache.git
+[submodule "src/github.com/ricallinson/httputils"]
+	path = src/github.com/ricallinson/httputils
+	url = https://github.com/ricallinson/httputils.git
+[submodule "src/github.com/ricallinson/stackr"]
+	path = src/github.com/ricallinson/stackr
+	url = https://github.com/ricallinson/stackr.git
