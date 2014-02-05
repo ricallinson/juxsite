@@ -1,2 +1,6 @@
 export GOPATH=~/Go/apps/juxsite
+
+go fmt ./http
+go fmt ./src/github.com/ricallinson/jux/
+
 ~/Go/appengine/goapp serve ./http

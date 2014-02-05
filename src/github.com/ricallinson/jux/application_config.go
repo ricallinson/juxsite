@@ -1,21 +1,28 @@
 package jux
 
-import(
+import (
 	"github.com/ricallinson/forgery"
 )
 
+// A Map of string IDs to forgery functions.
 type Components map[string]func(*f.Request, *f.Response, func())
 
 type AppCfg struct {
-
-	Page struct {
-		Title string
-		Theme string
-		Lang string
+	// Page level config.
+	Site struct {
+		BaseUrl     string
+		Name        string
+		Description string
+		Lang        string
+		Direction   string
 	}
 
-	DefaultComponent string
-	DefaultComponentView string
+	// Default values at the app level.
+	Defaults struct {
+		Theme         string
+		Component     string
+		ComponentView string
+	}
 
 	// Map of all available components.
 	Components Components
@@ -23,13 +30,15 @@ type AppCfg struct {
 
 func (this *AppCfg) Load(file string) {
 
-	this.Page.Title = "Jux"
-	this.Page.Theme = "default"
-	this.Page.Lang = "en-gb"
-	this.Page.Direction = "ltr"
+	this.Site.BaseUrl = "/"
+	this.Site.Name = "Jux"
+	this.Site.Description = ""
+	this.Site.Lang = "en-gb"
+	this.Site.Direction = "ltr"
 
-	this.DefaultComponent = "article"
-	this.DefaultComponentView = "main"
+	this.Defaults.Theme = "default"
+	this.Defaults.Component = "article"
+	this.Defaults.ComponentView = "main"
 
 	// Instantiate the Map of all available components.
 	this.Components = Components{}

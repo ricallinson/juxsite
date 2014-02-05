@@ -1,14 +1,49 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{lang}}" lang="{{lang}}" dir="{{direction}}">
-	<head>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <meta name="generator" content="Jux" />
-        <title>{{title}}</title>
-	</head>
-	<body>
-		<div>{{header}}</div>
-		<div>{{body}}</div>
-		<div>{{footer}}</div>
-	</body>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Jux" />
+<title>{{siteName}}</title>
+{{blocktop}}
+</head>
+<body>
+<!-- Body -->
+<div>
+	<!-- Header -->
+	<div>
+		<a href="{{baseUrl}}"><h1>{{siteName}}</h1></a>
+		<p>{{siteDescription}}</p>
+	</div>
+
+	{{#position-1}}
+	<!-- Nav Bar -->
+	<div>{{position-1}}</div>
+	{{/position-1}}
+
+	{{#position-2}}
+	<!-- Sidebar -->
+	<div>{{position-2}}</div>
+	{{/position-2}}
+
+	{{#position-3}}
+	<!-- Content -->
+	<div>{{position-3}}</div>
+	{{/position-3}}
+
+	{{#position-4}}
+	<!-- Right Sidebar -->
+	<div>{{position-4}}</div>
+	{{/position-4}}
+
+	<!-- Footer -->
+	<div>
+		{{#position-5}}
+		{{position-5}}
+		{{/position-5}}
+		<p>&copy; {{siteName}} {{year}}</p>
+	</div>
+</div>
+</body>
+{{blockbottom}}
 </html>
