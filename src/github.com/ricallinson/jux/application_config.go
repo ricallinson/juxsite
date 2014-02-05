@@ -43,9 +43,6 @@ func (this *AppCfg) Load(file string) {
 	this.Defaults.Component = "article"
 	this.Defaults.ComponentView = "main"
 
-	// Instantiate the Map of all available components.
-	this.Components = Components{}
-
 	// Instantiate the Map of layouts.
 	this.Layouts = map[string]map[string][]string{}
 
@@ -54,6 +51,9 @@ func (this *AppCfg) Load(file string) {
 		"position-01": {"a", "b"},
 		"position-05": {"c"},
 	}
+
+	// Instantiate the Map of all available components.
+	this.Components = Components{}
 }
 
 func (this *AppCfg) Save(file string) {
