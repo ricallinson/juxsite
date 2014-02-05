@@ -6,6 +6,22 @@ import (
 	"net/http"
 )
 
+// Register all default components.
+func registerDefaultComponents(cfg *AppCfg) {
+
+	cfg.RegisterComponent("a", func(req *f.Request, res *f.Response, next func()) {
+	    res.Send("Header")
+	})
+
+	cfg.RegisterComponent("b", func(req *f.Request, res *f.Response, next func()) {
+	    res.Send(req.Params["juxcomp"] + "/" + req.Params["juxview"])
+	})
+
+	cfg.RegisterComponent("c", func(req *f.Request, res *f.Response, next func()) {
+	    res.End("Footer")
+	})
+}
+
 func Start(cfg *AppCfg) {
 
 	app := f.CreateServer()
@@ -16,7 +32,13 @@ func Start(cfg *AppCfg) {
 
 	app.Engine(".html", fmustache.Make())
 
-	app.Locals["title"] = cfg.PageTitle
+	registerDefaultComponents(cfg)
+
+	// Set all template locals
+
+	app.Locals["title"] = cfg.Page.Title
+
+	// Create standard routes
 
 	app.Get("/", func(req *f.Request, res *f.Response, next func()) {
 		req.Params["juxcomp"] = cfg.DefaultComponent

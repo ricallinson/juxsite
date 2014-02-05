@@ -15,5 +15,5 @@ func Render(req *f.Request, res *f.Response, next func(), cfg *AppCfg) {
 
     data := composite.Dispatch(req, res, next)
 
-	res.Render("themes/" + cfg.PageTheme + "/index.html", data)
+	res.Render("themes/" + cfg.Page.Theme + "/index.html", data)
 }

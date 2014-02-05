@@ -8,8 +8,11 @@ type Components map[string]func(*f.Request, *f.Response, func())
 
 type AppCfg struct {
 
-	PageTitle string
-	PageTheme string
+	Page struct {
+		Title string
+		Theme string
+		Lang string
+	}
 
 	DefaultComponent string
 	DefaultComponentView string
@@ -20,28 +23,20 @@ type AppCfg struct {
 
 func (this *AppCfg) Load(file string) {
 
-	// Instantiate the Map of all available components.
-	this.Components = Components{}
-
-	this.PageTitle = "Jux - the Content Managment System"
-	this.PageTheme = "default"
+	this.Page.Title = "Jux"
+	this.Page.Theme = "default"
+	this.Page.Lang = "en-gb"
+	this.Page.Direction = "ltr"
 
 	this.DefaultComponent = "article"
 	this.DefaultComponentView = "main"
 
-	// Register all default components.
+	// Instantiate the Map of all available components.
+	this.Components = Components{}
+}
 
-	this.RegisterComponent("a", func(req *f.Request, res *f.Response, next func()) {
-	    res.Send("Header")
-	})
+func (this *AppCfg) Save(file string) {
 
-	this.RegisterComponent("b", func(req *f.Request, res *f.Response, next func()) {
-	    res.Send(req.Params["juxcomp"] + "/" + req.Params["juxview"])
-	})
-
-	this.RegisterComponent("c", func(req *f.Request, res *f.Response, next func()) {
-	    res.End("Footer")
-	})
 }
 
 func (this *AppCfg) RegisterComponent(name string, fn func(*f.Request, *f.Response, func())) {
