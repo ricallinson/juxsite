@@ -13,3 +13,6 @@
 [submodule "src/github.com/ricallinson/stackr"]
 	path = src/github.com/ricallinson/stackr
 	url = https://github.com/ricallinson/stackr.git
+[submodule "src/github.com/ricallinson/fcomposite"]
+	path = src/github.com/ricallinson/fcomposite
+	url = https://github.com/ricallinson/fcomposite.git
