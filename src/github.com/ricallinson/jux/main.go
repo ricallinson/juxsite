@@ -15,13 +15,21 @@ func registerDefaultComponents(cfg *AppCfg) {
 		res.Send("Nav Bar")
 	})
 
+	cfg.RegisterComponent("b", func(req *f.Request, res *f.Response, next func()) {
+		res.End("Extra")
+	})
+
+	cfg.RegisterComponent("c", func(req *f.Request, res *f.Response, next func()) {
+		res.End("Footer")
+	})
+
 	cfg.RegisterComponent("article", func(req *f.Request, res *f.Response, next func()) {
 		res.Locals["title"] = "Article"
 		res.Send(req.Params["juxcomp"] + "/" + req.Params["juxview"])
 	})
 
-	cfg.RegisterComponent("c", func(req *f.Request, res *f.Response, next func()) {
-		res.End("Footer")
+	cfg.RegisterComponent("error", func(req *f.Request, res *f.Response, next func()) {
+		res.End("Error: Component not found.")
 	})
 }
 

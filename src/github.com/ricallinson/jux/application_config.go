@@ -8,7 +8,7 @@ import (
 type Components map[string]func(*f.Request, *f.Response, func())
 
 type AppCfg struct {
-	// Page level config.
+	// Site configuration.
 	Site struct {
 		BaseUrl     string
 		Name        string
@@ -17,7 +17,7 @@ type AppCfg struct {
 		Direction   string
 	}
 
-	// Default values at the app level.
+	// Default values at the application level.
 	Defaults struct {
 		Theme         string
 		Component     string
@@ -26,6 +26,9 @@ type AppCfg struct {
 
 	// Map of all available components.
 	Components Components
+
+	// Map of all usable layouts.
+	Layouts map[string]map[string][]string
 }
 
 func (this *AppCfg) Load(file string) {
@@ -42,6 +45,15 @@ func (this *AppCfg) Load(file string) {
 
 	// Instantiate the Map of all available components.
 	this.Components = Components{}
+
+	// Instantiate the Map of layouts.
+	this.Layouts = map[string]map[string][]string{}
+
+	// Create the default layout.
+	this.Layouts["default"] = map[string][]string{
+		"position-01": {"a", "b"},
+		"position-05": {"c"},
+	}
 }
 
 func (this *AppCfg) Save(file string) {
