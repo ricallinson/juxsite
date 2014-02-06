@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/ricallinson/fmustache"
 	"github.com/ricallinson/forgery"
+	"github.com/ricallinson/jux/secure"
 	"net/http"
 	"time"
 )
@@ -31,6 +32,21 @@ func Start(cfg *AppCfg) {
 	app.Locals["year"] = fmt.Sprint(time.Now().Year())
 
 	// Create standard routes.
+
+	app.Get("/admin", secure.AdminAuth, func(req *f.Request, res *f.Response, next func()) {
+		req.Params["juxcomp"] = cfg.Defaults.Component
+		req.Params["juxview"] = cfg.Defaults.ComponentView
+		Render(req, res, next, cfg, app)
+	})
+
+	app.Get("/admin/:juxcomp", secure.AdminAuth, func(req *f.Request, res *f.Response, next func()) {
+		req.Params["juxview"] = cfg.Defaults.ComponentView
+		Render(req, res, next, cfg, app)
+	})
+
+	app.Get("/admin/:juxcomp/:juxview", secure.AdminAuth, func(req *f.Request, res *f.Response, next func()) {
+		Render(req, res, next, cfg, app)
+	})
 
 	app.Get("/", func(req *f.Request, res *f.Response, next func()) {
 		req.Params["juxcomp"] = cfg.Defaults.Component
