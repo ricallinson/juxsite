@@ -38,22 +38,21 @@ func Render(req *f.Request, res *f.Response, next func(), cfg *AppCfg, app *f.Se
 
 	// Dispatch the fcomposite.Map{}.
 	data := composite.Dispatch(req, res, next)
-	build := map[string]string{}
 
 	// Collapse the dispatched positions back into their layout positions.
 	for key, val := range data {
 		position := key[:11] // position-01(00)
-		if _, ok := build[position]; ok {
-			build[position] += val // append
+		if _, ok := res.Locals[position]; ok {
+			res.Locals[position] += val // append
 		} else {
-			build[position] = val // create
+			res.Locals[position] = val // create
 		}
 	}
 
 	if cfg.Site.Debug {
-		build["debug"] = debug(app.Locals, res.Locals, build)
+		res.Locals["debug"] = debug(app.Locals, res.Locals)
 	}
 
-	// Render the final build map into the template.
-	res.Render("themes/"+cfg.Defaults.Theme+"/index.html", build)
+	// Render the final component.
+	cfg.Components[cfg.Defaults.Theme](req, res, next)
 }
