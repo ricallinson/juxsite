@@ -11,19 +11,36 @@ func registerDefaultComponents(cfg *AppCfg) {
 	cfg.RegisterComponent("default", func(req *f.Request, res *f.Response, next func()) {
 		a := assets.Make(res.Locals)
 		a.AddCss("default/bootstrap/css/bootstrap.css")
+		a.AddCss("default/css/screen.css")
 		a.Render()
 		res.Render("default/main.html")
 	})
 
 	cfg.RegisterComponent("a", func(req *f.Request, res *f.Response, next func()) {
-		res.Render("a/main.html", map[string]string{
-			"msg": "A",
-		})
+
+		type Link struct {
+			Uri  string
+			Text string
+		}
+
+		res.Render("a/main.html",
+			map[string]string{
+				"title": "Main Menu",
+			},
+			map[string][]Link{
+				"links": []Link{
+					Link{
+						Uri:  "/",
+						Text: "Home",
+					},
+				},
+			})
 	})
 
 	cfg.RegisterComponent("b", func(req *f.Request, res *f.Response, next func()) {
 		res.Render("b/main.html", map[string]string{
-			"msg": "B",
+			"title": "Login Form",
+			"msg":   "B",
 		})
 	})
 

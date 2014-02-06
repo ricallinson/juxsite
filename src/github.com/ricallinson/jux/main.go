@@ -21,13 +21,13 @@ func Start(cfg *AppCfg) {
 	registerDefaultComponents(cfg)
 
 	// Set template locals.
-	app.Env = cfg.Site.Env
-	app.Locals["baseUrl"] = cfg.Site.BaseUrl
-	app.Locals["siteName"] = cfg.Site.Name
-	app.Locals["title"] = cfg.Site.Name
-	app.Locals["description"] = cfg.Site.Description
-	app.Locals["lang"] = cfg.Site.Lang
-	app.Locals["direction"] = cfg.Site.Direction
+	app.Env = cfg.Defaults.Env
+	app.Locals["baseUrl"] = cfg.Page.BaseUrl
+	app.Locals["siteName"] = cfg.Page.Name
+	app.Locals["pageTitle"] = cfg.Page.Name
+	app.Locals["description"] = cfg.Page.Description
+	app.Locals["lang"] = cfg.Page.Lang
+	app.Locals["direction"] = cfg.Page.Direction
 	app.Locals["year"] = fmt.Sprint(time.Now().Year())
 
 	// Create standard routes.

@@ -49,7 +49,7 @@ func Render(req *f.Request, res *f.Response, next func(), cfg *AppCfg, app *f.Se
 		}
 	}
 
-	if cfg.Site.Debug {
+	if cfg.Defaults.Debug {
 		res.Locals["debug"] = debug(app.Locals, res.Locals)
 	}
 

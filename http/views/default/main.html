@@ -1,44 +1,45 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{lang}}" lang="{{lang}}" dir="{{direction}}">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta name="generator" content="Jux" />
-<title>{{title}}</title>
+<title>{{pageTitle}}</title>
 {{{blob-top}}}
 </head>
 <body>
 <!-- Body -->
-<div>
+<div class="container">
+
 	<!-- Header -->
-	<div>
-		<a href="{{baseUrl}}">{{siteName}}</a>
-		{{#description}}<p>{{description}}</p>{{/description}}
-		<h1>{{title}}</h1>
+	<div class="page-header">
+		<h1><a href="{{baseUrl}}">{{siteName}}</a></h1>
 	</div>
 
-	{{#position-01}}
-	<!-- Nav Bar -->
+	{{#position-01}}<!-- Nav Bar -->
 	<div>{{{position-01}}}</div>
 	{{/position-01}}
+</div>
 
-	{{#position-02}}
-	<!-- Sidebar -->
-	<div>{{{position-02}}}</div>
-	{{/position-02}}
+<div class="container">
+	<div class="row">
+		{{#position-02}}<!-- Sidebar -->
+		<div class="col-md-0">{{{position-02}}}</div>
+		{{/position-02}}
 
-	{{#maincontent}}
-	<!-- Content -->
-	<div>{{{maincontent}}}</div>
-	{{/maincontent}}
+		{{#maincontent}}<!-- Content -->
+		<div class="col-md-8">{{{maincontent}}}</div>
+		{{/maincontent}}
 
-	{{#position-03}}
-	<!-- Right Sidebar -->
-	<div>{{{position-03}}}</div>
-	{{/position-03}}
+		{{#position-03}}<!-- Right Sidebar -->
+		<div class="col-md-4">{{{position-03}}}</div>
+		{{/position-03}}
+	</div>
+</div>
 
+<div class="container">
 	<!-- Footer -->
-	<div>
+	<div class="clearfix">
 		{{#position-04}}
 		{{{position-04}}}
 		{{/position-04}}
