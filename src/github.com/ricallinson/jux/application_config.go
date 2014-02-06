@@ -59,6 +59,9 @@ func (this *AppCfg) Load(file string) {
 
 	// Instantiate the Map of all available components.
 	this.Components = Components{}
+
+	// Register any default components.
+	registerDefaultComponents(this)
 }
 
 func (this *AppCfg) Save(file string) {

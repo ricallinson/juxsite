@@ -19,8 +19,6 @@ func Start(cfg *AppCfg) {
 
 	app.Engine(".html", fmustache.Make())
 
-	registerDefaultComponents(cfg)
-
 	// Set template locals.
 	app.Env = cfg.Defaults.Env
 	app.Locals["baseUrl"] = cfg.Page.BaseUrl
