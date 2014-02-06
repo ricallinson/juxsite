@@ -2,12 +2,16 @@ package jux
 
 import (
 	"github.com/ricallinson/forgery"
+	"github.com/ricallinson/jux/assets"
 )
 
 // Register all default components.
 func registerDefaultComponents(cfg *AppCfg) {
 
 	cfg.RegisterComponent("default", func(req *f.Request, res *f.Response, next func()) {
+		a := assets.Make(res.Locals)
+		a.AddCss("default/bootstrap/css/bootstrap.css")
+		a.Render()
 		res.Render("default/main.html")
 	})
 

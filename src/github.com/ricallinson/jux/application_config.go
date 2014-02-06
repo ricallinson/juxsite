@@ -10,6 +10,7 @@ type Components map[string]func(*f.Request, *f.Response, func())
 type AppCfg struct {
 	// Site configuration.
 	Site struct {
+		Env         string
 		Debug       bool
 		BaseUrl     string
 		Name        string
@@ -34,6 +35,7 @@ type AppCfg struct {
 
 func (this *AppCfg) Load(file string) {
 
+	this.Site.Env = "development"
 	this.Site.Debug = false
 	this.Site.BaseUrl = "/"
 	this.Site.Name = "Jux"

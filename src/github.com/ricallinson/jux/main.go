@@ -21,7 +21,7 @@ func Start(cfg *AppCfg) {
 	registerDefaultComponents(cfg)
 
 	// Set template locals.
-
+	app.Env = cfg.Site.Env
 	app.Locals["baseUrl"] = cfg.Site.BaseUrl
 	app.Locals["siteName"] = cfg.Site.Name
 	app.Locals["title"] = cfg.Site.Name
