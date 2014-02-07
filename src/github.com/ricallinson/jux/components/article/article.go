@@ -16,7 +16,7 @@ func Handler(req *f.Request, res *f.Response, next func()) {
 
 // Shows a list of articles for the given category.
 func list(req *f.Request, res *f.Response, next func()) {
-	res.Locals["title"] = "Article"
+	res.Locals["title"] = "All Articles"
 	articles := loadArticles("data/articles")
 	res.Render("article/list.html", map[string][]article{
 		"articles": articles,
