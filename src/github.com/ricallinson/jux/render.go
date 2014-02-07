@@ -20,7 +20,7 @@ func debug(maps ...map[string]string) string {
 func Render(req *f.Request, res *f.Response, next func(), cfg *AppCfg, app *f.Server) {
 
 	// Based on "juxmode" we need to pick a layout.
-	layout := cfg.App.Layouts[req.Params["juxmode"]]
+	layout := cfg.GetLayout(req.Params["juxmode"])
 	layout["maincontent"] = []string{req.Params["juxcomp"]}
 	composite := fcomposite.Map{}
 	count := 0

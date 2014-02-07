@@ -37,6 +37,7 @@ type AppCfg struct {
 	Components map[string]func(*f.Request, *f.Response, func())
 }
 
+// Load the configuration from the give YAML file.
 func (this *AppCfg) Load(file string) /*(error)*/ {
 	// Prime this AppCfg instance.
 	this.init()
@@ -55,6 +56,7 @@ func (this *AppCfg) Load(file string) /*(error)*/ {
 	}
 }
 
+// Return the configuration as a YAML string.
 func (this *AppCfg) String() string {
 	data, err1 := goyaml.Marshal(this.App)
 	if err1 != nil {
@@ -63,10 +65,23 @@ func (this *AppCfg) String() string {
 	return string(data)
 }
 
+// Register a new component.
 func (this *AppCfg) RegisterComponent(name string, fn func(*f.Request, *f.Response, func())) {
 	this.Components[name] = fn
 }
 
+// returns a copy of the matched layout or an empty map.
+func (this *AppCfg) GetLayout(name string) map[string][]string {
+	layout := map[string][]string{}
+	if _, ok := this.App.Layouts[name]; ok {
+		for position, _ := range this.App.Layouts[name] {
+			layout[position] = this.App.Layouts[name][position]
+		}
+	}
+	return layout
+}
+
+// Populates the defaults for the configuration.
 func (this *AppCfg) init() {
 
 	this.App.Page.BaseUrl = "/"
