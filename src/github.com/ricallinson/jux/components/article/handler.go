@@ -1,7 +1,6 @@
 package article
 
 import (
-	"appengine"
 	"github.com/ricallinson/forgery"
 )
 
@@ -19,10 +18,11 @@ func Handler(req *f.Request, res *f.Response, next func()) {
 
 // Shows a list of articles for the given category.
 func list(req *f.Request, res *f.Response, next func()) {
-	res.Locals["title"] = "All Articles"
 	articles := ListArticles(req)
 	res.Render("article/list.html", map[string][]*Article{
 		"articles": articles,
+	}, map[string]string{
+		"title": "All Articles",
 	})
 }
 
@@ -30,10 +30,7 @@ func list(req *f.Request, res *f.Response, next func()) {
 func read(req *f.Request, res *f.Response, next func()) {
 	article := &Article{Id: req.Query["id"]}
 	article.Read(req)
-
-	context := appengine.NewContext(req.Request.Request)
-    context.Debugf("Article: %v", article)
-
+	res.Locals["pageTitle"] = article.Title
 	res.Render("article/read.html", map[string][]*Article{
 		"articles": []*Article{article},
 	})

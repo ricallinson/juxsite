@@ -19,22 +19,22 @@ func ListArticles(req *f.Request) []*Article {
 }
 
 func (this *Article) Create(req *f.Request) error {
-    // c := appengine.NewContext(req.Request.Request)
+	// c := appengine.NewContext(req.Request.Request)
 	return nil
 }
 
 func (this *Article) Read(req *f.Request) error {
-    // c := appengine.NewContext(req.Request.Request)
-    loadArticle("data/articles", this)
+	// c := appengine.NewContext(req.Request.Request)
+	loadArticle("data/articles", this)
 	return nil
 }
 
 func (this *Article) Update(req *f.Request) error {
-    // c := appengine.NewContext(req.Request.Request)
+	// c := appengine.NewContext(req.Request.Request)
 	return nil
 }
 
 func (this *Article) Delete(req *f.Request) error {
-    // c := appengine.NewContext(req.Request.Request)
+	// c := appengine.NewContext(req.Request.Request)
 	return nil
 }

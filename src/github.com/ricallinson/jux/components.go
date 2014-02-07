@@ -11,6 +11,7 @@ func registerDefaultComponents(cfg *AppCfg) {
 	cfg.RegisterComponent("error", notfound.Handler)
 	cfg.RegisterComponent("default", components.DefaultHandler)
 	cfg.RegisterComponent("article", article.Handler)
+	cfg.RegisterComponent("article_menu", article.MenuHandler)
 	cfg.RegisterComponent("a", components.AHandler)
 	cfg.RegisterComponent("b", components.BHandler)
 	cfg.RegisterComponent("c", components.CHandler)

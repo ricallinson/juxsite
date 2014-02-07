@@ -26,7 +26,7 @@ func loadArticles(dirname string) []*Article {
 	return articles
 }
 
-func loadArticle(dirname string, article *Article) (bool) {
+func loadArticle(dirname string, article *Article) bool {
 	filename := path.Join(dirname, article.Id)
 	j, err1 := ioutil.ReadFile(filename)
 	if err1 != nil {
