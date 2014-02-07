@@ -13,8 +13,8 @@ type article struct {
 	Text     string
 }
 
-func loadArticles(dirname string) []article {
-	articles := []article{}
+func loadArticles(dirname string) []*article {
+	articles := []*article{}
 	list, err := ioutil.ReadDir(dirname)
 	if err != nil {
 		// panic(err)
@@ -32,8 +32,8 @@ func loadArticles(dirname string) []article {
 	return articles
 }
 
-func loadFile(filename string) (article, bool) {
-	a := article{}
+func loadFile(filename string) (*article, bool) {
+	a := &article{}
 	j, err1 := ioutil.ReadFile(filename)
 	if err1 != nil {
 		// panic(err1)

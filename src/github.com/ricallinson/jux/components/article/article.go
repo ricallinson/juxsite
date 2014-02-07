@@ -18,7 +18,7 @@ func Handler(req *f.Request, res *f.Response, next func()) {
 func list(req *f.Request, res *f.Response, next func()) {
 	res.Locals["title"] = "All Articles"
 	articles := loadArticles("data/articles")
-	res.Render("article/list.html", map[string][]article{
+	res.Render("article/list.html", map[string][]*article{
 		"articles": articles,
 	})
 }
