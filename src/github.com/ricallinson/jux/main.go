@@ -20,25 +20,30 @@ func Start(cfg *AppCfg) {
 	app.Engine(".html", fmustache.Make())
 
 	// Set template locals.
-	app.Env = cfg.Defaults.Env
-	app.Locals["baseUrl"] = cfg.Page.BaseUrl
-	app.Locals["siteName"] = cfg.Page.Name
-	app.Locals["pageTitle"] = cfg.Page.Name
-	app.Locals["description"] = cfg.Page.Description
-	app.Locals["lang"] = cfg.Page.Lang
-	app.Locals["direction"] = cfg.Page.Direction
+	app.Env = cfg.App.Defaults.Env
+	app.Locals["baseUrl"] = cfg.App.Page.BaseUrl
+	app.Locals["siteName"] = cfg.App.Page.Name
+	app.Locals["pageTitle"] = cfg.App.Page.Name
+	app.Locals["description"] = cfg.App.Page.Description
+	app.Locals["lang"] = cfg.App.Page.Lang
+	app.Locals["direction"] = cfg.App.Page.Direction
 	app.Locals["year"] = fmt.Sprint(time.Now().Year())
 
 	// Create standard routes.
 
+	app.Get("/debug" /*secure.AdminAuth,*/, func(req *f.Request, res *f.Response, next func()) {
+		res.ContentType("text/plain")
+		res.Send(cfg.String())
+	})
+
 	app.Get("/admin", secure.AdminAuth, func(req *f.Request, res *f.Response, next func()) {
-		req.Params["juxcomp"] = cfg.Defaults.Component
-		req.Params["juxview"] = cfg.Defaults.ComponentView
+		req.Params["juxcomp"] = cfg.App.Defaults.Component
+		req.Params["juxview"] = cfg.App.Defaults.ComponentView
 		Render(req, res, next, cfg, app)
 	})
 
 	app.Get("/admin/:juxcomp", secure.AdminAuth, func(req *f.Request, res *f.Response, next func()) {
-		req.Params["juxview"] = cfg.Defaults.ComponentView
+		req.Params["juxview"] = cfg.App.Defaults.ComponentView
 		Render(req, res, next, cfg, app)
 	})
 
@@ -47,13 +52,13 @@ func Start(cfg *AppCfg) {
 	})
 
 	app.Get("/", func(req *f.Request, res *f.Response, next func()) {
-		req.Params["juxcomp"] = cfg.Defaults.Component
-		req.Params["juxview"] = cfg.Defaults.ComponentView
+		req.Params["juxcomp"] = cfg.App.Defaults.Component
+		req.Params["juxview"] = cfg.App.Defaults.ComponentView
 		Render(req, res, next, cfg, app)
 	})
 
 	app.Get("/:juxcomp", func(req *f.Request, res *f.Response, next func()) {
-		req.Params["juxview"] = cfg.Defaults.ComponentView
+		req.Params["juxview"] = cfg.App.Defaults.ComponentView
 		Render(req, res, next, cfg, app)
 	})
 

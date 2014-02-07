@@ -19,7 +19,7 @@ func debug(maps ...map[string]string) string {
 
 func Render(req *f.Request, res *f.Response, next func(), cfg *AppCfg, app *f.Server) {
 
-	layout := cfg.Layouts["default"]
+	layout := cfg.App.Layouts["default"]
 	layout["maincontent"] = []string{req.Params["juxcomp"]}
 	composite := fcomposite.Map{}
 	count := 0
@@ -49,10 +49,10 @@ func Render(req *f.Request, res *f.Response, next func(), cfg *AppCfg, app *f.Se
 		}
 	}
 
-	if cfg.Defaults.Debug {
+	if cfg.App.Defaults.Debug {
 		res.Locals["debug"] = debug(app.Locals, res.Locals)
 	}
 
 	// Render the final component.
-	cfg.Components[cfg.Defaults.Theme](req, res, next)
+	cfg.Components[cfg.App.Defaults.Theme](req, res, next)
 }
