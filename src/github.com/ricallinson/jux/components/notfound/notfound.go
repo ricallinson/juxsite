@@ -5,7 +5,7 @@ import (
 )
 
 func Handler(req *f.Request, res *f.Response, next func()) {
-	res.Render("error/main.html", map[string]string{
+	res.Render("notfound/main.html", map[string]string{
 		"error": "Component not found.",
 	})
 }

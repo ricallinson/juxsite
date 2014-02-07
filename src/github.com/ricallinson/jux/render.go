@@ -24,7 +24,7 @@ func Render(req *f.Request, res *f.Response, next func(), cfg *AppCfg, app *f.Se
 		if component, ok := cfg.Components[req.Params["juxcomp"]]; ok {
 			component(req, res, next)
 		} else {
-			cfg.Components["error"](req, res, next)
+			cfg.Components["notfound"](req, res, next)
 		}
 		return
 	}
@@ -41,7 +41,7 @@ func Render(req *f.Request, res *f.Response, next func(), cfg *AppCfg, app *f.Se
 			if component, ok := cfg.Components[name]; ok {
 				composite[pos+fmt.Sprint(count)] = component
 			} else {
-				composite[pos+fmt.Sprint(count)] = cfg.Components["error"]
+				composite[pos+fmt.Sprint(count)] = cfg.Components["notfound"]
 			}
 			count++
 		}

@@ -2,6 +2,7 @@ package article
 
 import (
 	// "appengine"
+	"errors"
 	"github.com/ricallinson/forgery"
 )
 
@@ -13,9 +14,9 @@ type Article struct {
 	Text     string
 }
 
-func ListArticles(req *f.Request) []*Article {
+func ListArticles(req *f.Request, from int, to int) []*Article {
 	// c := appengine.NewContext(req.Request.Request)
-	return loadArticles("data/articles")
+	return loadArticles("data/articles", from, to)
 }
 
 func (this *Article) Create(req *f.Request) error {
@@ -25,7 +26,9 @@ func (this *Article) Create(req *f.Request) error {
 
 func (this *Article) Read(req *f.Request) error {
 	// c := appengine.NewContext(req.Request.Request)
-	loadArticle("data/articles", this)
+	if loadArticle("data/articles", this) == false {
+		return errors.New("Article not found.")
+	}
 	return nil
 }
 

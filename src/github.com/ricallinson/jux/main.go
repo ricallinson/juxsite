@@ -73,5 +73,11 @@ func Start(cfg *AppCfg) {
 		Render(req, res, next, cfg, app)
 	})
 
+	app.Get("*", func(req *f.Request, res *f.Response, next func()) {
+		req.Query["juxskip"] = "1"
+		req.Params["juxcomp"] = "404"
+		Render(req, res, next, cfg, app)
+	})
+
 	http.Handle("/", app)
 }

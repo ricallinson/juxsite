@@ -18,7 +18,7 @@ func Handler(req *f.Request, res *f.Response, next func()) {
 
 // Shows a list of articles for the given category.
 func list(req *f.Request, res *f.Response, next func()) {
-	articles := ListArticles(req)
+	articles := ListArticles(req, 0, 100)
 	res.Render("article/list.html", map[string][]*Article{
 		"articles": articles,
 	}, map[string]string{
@@ -29,7 +29,12 @@ func list(req *f.Request, res *f.Response, next func()) {
 // Shows a list of articles for the given category.
 func read(req *f.Request, res *f.Response, next func()) {
 	article := &Article{Id: req.Query["id"]}
-	article.Read(req)
+	if article.Id == "" || article.Read(req) != nil {
+		res.Render("notfound/main.html", map[string]string{
+			"error": "Article not found.",
+		})
+		return
+	}
 	res.Locals["pageTitle"] = article.Title
 	res.Render("article/read.html", map[string][]*Article{
 		"articles": []*Article{article},
@@ -38,5 +43,5 @@ func read(req *f.Request, res *f.Response, next func()) {
 
 // Shows a list of articles for the given category.
 func listJson(req *f.Request, res *f.Response, next func()) {
-	res.Json(loadArticles("data/articles"))
+	res.Json(ListArticles(req, 0, 100))
 }

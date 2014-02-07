@@ -92,7 +92,7 @@ func (this *AppCfg) init() {
 
 	this.App.Defaults.Debug = false
 	this.App.Defaults.Env = "development"
-	this.App.Defaults.Theme = "default"
+	this.App.Defaults.Theme = "publictheme"
 	this.App.Defaults.Component = "article"
 	this.App.Defaults.ComponentView = "main"
 	this.App.Defaults.AdminTheme = "default"
