@@ -23,8 +23,9 @@ func Start(cfg *AppCfg) {
 	app.Env = cfg.App.Defaults.Env
 	app.Locals["baseUrl"] = cfg.App.Page.BaseUrl
 	app.Locals["siteName"] = cfg.App.Page.Name
+	app.Locals["siteDescription"] = cfg.App.Page.Description
 	app.Locals["pageTitle"] = cfg.App.Page.Name
-	app.Locals["description"] = cfg.App.Page.Description
+	app.Locals["pageDescription"] = cfg.App.Page.Description
 	app.Locals["lang"] = cfg.App.Page.Lang
 	app.Locals["direction"] = cfg.App.Page.Direction
 	app.Locals["year"] = fmt.Sprint(time.Now().Year())
