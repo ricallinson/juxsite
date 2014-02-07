@@ -5,26 +5,20 @@ import (
 	"github.com/russross/blackfriday"
 	"io/ioutil"
 	"path"
+	"strings"
 )
 
-type article struct {
-	Title    string
-	Category string
-	Text     string
-}
-
-func loadArticles(dirname string) []*article {
-	articles := []*article{}
+func loadArticles(dirname string) []*Article {
+	articles := []*Article{}
 	list, err := ioutil.ReadDir(dirname)
 	if err != nil {
-		// panic(err)
+		panic(err)
 		return articles
 	}
 	for _, file := range list {
 		if file.IsDir() != true {
-			filename := path.Join(dirname, file.Name())
-			if article, ok := loadFile(filename); ok {
-				article.Text = string(blackfriday.MarkdownBasic([]byte(article.Text)))
+			article := &Article{Id: file.Name()}
+			if loadArticle(dirname, article) {
 				articles = append(articles, article)
 			}
 		}
@@ -32,17 +26,21 @@ func loadArticles(dirname string) []*article {
 	return articles
 }
 
-func loadFile(filename string) (*article, bool) {
-	a := &article{}
+func loadArticle(dirname string, article *Article) (bool) {
+	filename := path.Join(dirname, article.Id)
 	j, err1 := ioutil.ReadFile(filename)
 	if err1 != nil {
-		// panic(err1)
-		return a, false
+		panic(err1)
+		return false
 	}
-	err2 := json.Unmarshal(j, &a)
+	err2 := json.Unmarshal(j, &article)
 	if err2 != nil {
-		// panic(err2)
-		return a, false
+		panic(err2)
+		return false
 	}
-	return a, true
+	if line := strings.Index(article.Text, "\r\n"); line > 0 {
+		article.Summary = string(blackfriday.MarkdownBasic([]byte(article.Text[:line])))
+	}
+	article.Text = string(blackfriday.MarkdownBasic([]byte(article.Text)))
+	return true
 }

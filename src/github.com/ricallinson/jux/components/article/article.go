@@ -1,29 +1,40 @@
 package article
 
 import (
+	// "appengine"
 	"github.com/ricallinson/forgery"
 )
 
-// Route the request to the correct handler function.
-func Handler(req *f.Request, res *f.Response, next func()) {
-	switch req.Params["juxview"] {
-	case "main":
-		list(req, res, next)
-	case "listjson":
-		listJson(req, res, next)
-	}
+type Article struct {
+	Id       string
+	Title    string
+	Category string
+	Summary  string
+	Text     string
 }
 
-// Shows a list of articles for the given category.
-func list(req *f.Request, res *f.Response, next func()) {
-	res.Locals["title"] = "All Articles"
-	articles := loadArticles("data/articles")
-	res.Render("article/list.html", map[string][]*article{
-		"articles": articles,
-	})
+func ListArticles(req *f.Request) []*Article {
+	// c := appengine.NewContext(req.Request.Request)
+	return loadArticles("data/articles")
 }
 
-// Shows a list of articles for the given category.
-func listJson(req *f.Request, res *f.Response, next func()) {
-	res.Json(loadArticles("data/articles"))
+func (this *Article) Create(req *f.Request) error {
+    // c := appengine.NewContext(req.Request.Request)
+	return nil
+}
+
+func (this *Article) Read(req *f.Request) error {
+    // c := appengine.NewContext(req.Request.Request)
+    loadArticle("data/articles", this)
+	return nil
+}
+
+func (this *Article) Update(req *f.Request) error {
+    // c := appengine.NewContext(req.Request.Request)
+	return nil
+}
+
+func (this *Article) Delete(req *f.Request) error {
+    // c := appengine.NewContext(req.Request.Request)
+	return nil
 }
