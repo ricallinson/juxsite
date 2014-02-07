@@ -19,11 +19,14 @@ type AppCfg struct {
 
 		// Default values at the application level.
 		Defaults struct {
-			Env           string
-			Debug         bool
-			Theme         string
-			Component     string
-			ComponentView string
+			Env                string
+			Debug              bool
+			Theme              string
+			Component          string
+			ComponentView      string
+			AdminTheme         string
+			AdminComponent     string
+			AdminComponentView string
 		}
 
 		// Map of all usable layouts.
@@ -77,15 +80,23 @@ func (this *AppCfg) init() {
 	this.App.Defaults.Theme = "default"
 	this.App.Defaults.Component = "article"
 	this.App.Defaults.ComponentView = "main"
+	this.App.Defaults.AdminTheme = "default"
+	this.App.Defaults.AdminComponent = "f"
+	this.App.Defaults.AdminComponentView = "main"
 
 	// Instantiate the Map of layouts.
 	this.App.Layouts = map[string]map[string][]string{}
 
-	// Create the default layout.
-	this.App.Layouts["default"] = map[string][]string{
+	// Create the default "public" layout.
+	this.App.Layouts["public"] = map[string][]string{
 		// "position-01": {"a"}, // Bread crumbs.
 		"position-03": {"a", "b"}, // Menu and Login.
 		"position-04": {"f"},      // Sample error.
+	}
+
+	// Create the default "admin" layout.
+	this.App.Layouts["admin"] = map[string][]string{
+	// "position-01": {"f"}, // Sample error.
 	}
 
 	// Instantiate the Map of all available components.

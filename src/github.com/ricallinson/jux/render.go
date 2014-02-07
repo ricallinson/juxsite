@@ -19,7 +19,8 @@ func debug(maps ...map[string]string) string {
 
 func Render(req *f.Request, res *f.Response, next func(), cfg *AppCfg, app *f.Server) {
 
-	layout := cfg.App.Layouts["default"]
+	// Based on "juxmode" we need to pick a layout.
+	layout := cfg.App.Layouts[req.Params["juxmode"]]
 	layout["maincontent"] = []string{req.Params["juxcomp"]}
 	composite := fcomposite.Map{}
 	count := 0
@@ -53,6 +54,11 @@ func Render(req *f.Request, res *f.Response, next func(), cfg *AppCfg, app *f.Se
 		res.Locals["debug"] = debug(app.Locals, res.Locals)
 	}
 
+	// Based on "juxmode" we need to pick a theme.
+	theme := cfg.App.Defaults.Theme
+	if req.Params["juxmode"] == "admin" {
+		theme = cfg.App.Defaults.AdminTheme
+	}
 	// Render the final component.
-	cfg.Components[cfg.App.Defaults.Theme](req, res, next)
+	cfg.Components[theme](req, res, next)
 }

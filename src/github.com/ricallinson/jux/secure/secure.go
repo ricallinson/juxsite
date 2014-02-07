@@ -17,8 +17,7 @@ func UserAuth(req *f.Request, res *f.Response, next func()) {
 		res.Redirect(url)
 		return
 	}
-	context.Debugf("User: %v", u.String())
-	next()
+	// context.Debugf("User: %v", u.String())
 }
 
 /*
@@ -32,6 +31,5 @@ func AdminAuth(req *f.Request, res *f.Response, next func()) {
 		res.Redirect(url)
 		return
 	}
-	context.Debugf("User: %v", u.String())
-	next()
+	// context.Debugf("User: %v", u.String())
 }

@@ -32,38 +32,44 @@ func Start(cfg *AppCfg) {
 
 	// Create standard routes.
 
-	app.Get("/debug" /*secure.AdminAuth,*/, func(req *f.Request, res *f.Response, next func()) {
+	app.Get("/site.yaml", secure.AdminAuth, func(req *f.Request, res *f.Response, next func()) {
 		res.ContentType("text/plain")
 		res.Send(cfg.String())
 	})
 
 	app.Get("/admin", secure.AdminAuth, func(req *f.Request, res *f.Response, next func()) {
-		req.Params["juxcomp"] = cfg.App.Defaults.Component
-		req.Params["juxview"] = cfg.App.Defaults.ComponentView
+		req.Params["juxmode"] = "admin"
+		req.Params["juxcomp"] = cfg.App.Defaults.AdminComponent
+		req.Params["juxview"] = cfg.App.Defaults.AdminComponentView
 		Render(req, res, next, cfg, app)
 	})
 
 	app.Get("/admin/:juxcomp", secure.AdminAuth, func(req *f.Request, res *f.Response, next func()) {
-		req.Params["juxview"] = cfg.App.Defaults.ComponentView
+		req.Params["juxmode"] = "admin"
+		req.Params["juxview"] = cfg.App.Defaults.AdminComponentView
 		Render(req, res, next, cfg, app)
 	})
 
 	app.Get("/admin/:juxcomp/:juxview", secure.AdminAuth, func(req *f.Request, res *f.Response, next func()) {
+		req.Params["juxmode"] = "admin"
 		Render(req, res, next, cfg, app)
 	})
 
 	app.Get("/", func(req *f.Request, res *f.Response, next func()) {
+		req.Params["juxmode"] = "public"
 		req.Params["juxcomp"] = cfg.App.Defaults.Component
 		req.Params["juxview"] = cfg.App.Defaults.ComponentView
 		Render(req, res, next, cfg, app)
 	})
 
 	app.Get("/:juxcomp", func(req *f.Request, res *f.Response, next func()) {
+		req.Params["juxmode"] = "public"
 		req.Params["juxview"] = cfg.App.Defaults.ComponentView
 		Render(req, res, next, cfg, app)
 	})
 
 	app.Get("/:juxcomp/:juxview", func(req *f.Request, res *f.Response, next func()) {
+		req.Params["juxmode"] = "public"
 		Render(req, res, next, cfg, app)
 	})
 
