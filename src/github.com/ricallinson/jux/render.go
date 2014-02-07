@@ -19,6 +19,16 @@ func debug(maps ...map[string]string) string {
 
 func Render(req *f.Request, res *f.Response, next func(), cfg *AppCfg, app *f.Server) {
 
+	// If "juxskip" is set then just reander the requested component.
+	if _, ok := req.Query["juxskip"]; ok {
+		if component, ok := cfg.Components[req.Params["juxcomp"]]; ok {
+			component(req, res, next)
+		} else {
+			cfg.Components["error"](req, res, next)
+		}
+		return
+	}
+
 	// Based on "juxmode" we need to pick a layout.
 	layout := cfg.GetLayout(req.Params["juxmode"])
 	layout["maincontent"] = []string{req.Params["juxcomp"]}

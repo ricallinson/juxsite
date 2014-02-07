@@ -5,5 +5,7 @@ go fmt ./src/github.com/ricallinson/jux/
 go fmt ./src/github.com/ricallinson/jux/assets
 go fmt ./src/github.com/ricallinson/jux/secure
 go fmt ./src/github.com/ricallinson/jux/components
+go fmt ./src/github.com/ricallinson/jux/components/article
+go fmt ./src/github.com/ricallinson/jux/components/notfound
 
 ~/Go/appengine/goapp serve ./http

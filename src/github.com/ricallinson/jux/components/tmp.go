@@ -4,13 +4,6 @@ import (
 	"github.com/ricallinson/forgery"
 )
 
-func ArticleHandler(req *f.Request, res *f.Response, next func()) {
-	res.Locals["title"] = "Article"
-	res.Render("article/main.html", map[string]string{
-		"msg": req.Params["juxcomp"] + "/" + req.Params["juxview"],
-	})
-}
-
 func AHandler(req *f.Request, res *f.Response, next func()) {
 	type Link struct {
 		Uri  string

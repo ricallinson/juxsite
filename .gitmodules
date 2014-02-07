@@ -16,3 +16,9 @@
 [submodule "src/github.com/ricallinson/fcomposite"]
 	path = src/github.com/ricallinson/fcomposite
 	url = https://github.com/ricallinson/fcomposite.git
+[submodule "src/github.com/ricallinson/fmarkdown"]
+	path = src/github.com/ricallinson/fmarkdown
+	url = https://github.com/ricallinson/fmarkdown.git
+[submodule "src/github.com/russross/blackfriday"]
+	path = src/github.com/russross/blackfriday
+	url = https://github.com/russross/blackfriday.git
