@@ -17,7 +17,8 @@ func loadArticles(dirname string) []article {
 	articles := []article{}
 	list, err := ioutil.ReadDir(dirname)
 	if err != nil {
-		panic(err)
+		// panic(err)
+		return articles
 	}
 	for _, file := range list {
 		if file.IsDir() != true {
@@ -32,14 +33,16 @@ func loadArticles(dirname string) []article {
 }
 
 func loadFile(filename string) (article, bool) {
+	a := article{}
 	j, err1 := ioutil.ReadFile(filename)
 	if err1 != nil {
-		panic(err1)
+		// panic(err1)
+		return a, false
 	}
-	a := article{}
 	err2 := json.Unmarshal(j, &a)
 	if err2 != nil {
-		panic(err2)
+		// panic(err2)
+		return a, false
 	}
 	return a, true
 }
