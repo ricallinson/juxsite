@@ -4,9 +4,10 @@ import (
 	"github.com/ricallinson/forgery"
 	"io/ioutil"
 	"launchpad.net/goyaml"
+	"path"
 )
 
-type AppCfg struct {
+type Config struct {
 	App struct {
 		// Page level configuration keys.
 		Page struct {
@@ -37,28 +38,48 @@ type AppCfg struct {
 	Components map[string]func(*f.Request, *f.Response, func())
 }
 
-// Load the configuration from the give YAML file.
-func (this *AppCfg) Load(file string) /*(error)*/ {
-	// Prime this AppCfg instance.
-	this.init()
+// Read the given YAML file into the given Interface.
+func (this *Config) readFile(filepath string, i interface{}) {
 	// Read the source file.
-	data, err1 := ioutil.ReadFile(file)
+	data, err1 := ioutil.ReadFile(filepath)
 	if err1 != nil {
 		panic(err1)
 		return // error
 	}
-	// Unmarshal the source into this AppCfg instance.
+	// Unmarshal the source into this Config instance.
 	// This overrides any default settings from the init() call.
-	err2 := goyaml.Unmarshal([]byte(data), &this.App)
+	err2 := goyaml.Unmarshal([]byte(data), i)
 	if err2 != nil {
 		panic(err2)
 		return // error
 	}
 }
 
+func GetConfig(req *f.Request) *Config {
+	return req.Map["cfg"].(*Config)
+}
+
+// Load the configuration from the give YAML file.
+func (this *Config) Load(filepath string) /*(error)*/ {
+	// Prime this Config instance.
+	this.init()
+	this.readFile(filepath, &this.App)
+}
+
+// Read the config file for the given component name.
+func (this *Config) Get(name string, i interface{}) {
+	filepath := path.Join("config", name+".yaml")
+	this.readFile(filepath, i)
+}
+
 // Return the configuration as a YAML string.
-func (this *AppCfg) String() string {
-	data, err1 := goyaml.Marshal(this.App)
+func (this *Config) String() string {
+	return this.ToYaml(this.App)
+}
+
+// Return the configuration as a YAML string.
+func (this *Config) ToYaml(i interface{}) string {
+	data, err1 := goyaml.Marshal(i)
 	if err1 != nil {
 		panic(err1)
 	}
@@ -66,12 +87,12 @@ func (this *AppCfg) String() string {
 }
 
 // Registers a new component with the application.
-func (this *AppCfg) RegisterComponent(name string, fn func(*f.Request, *f.Response, func())) {
+func (this *Config) RegisterComponent(name string, fn func(*f.Request, *f.Response, func())) {
 	this.Components[name] = fn
 }
 
 // Returns a copy of the matched layout or an empty map.
-func (this *AppCfg) GetLayout(name string) map[string][]string {
+func (this *Config) GetLayout(name string) map[string][]string {
 	layout := map[string][]string{}
 	if _, ok := this.App.Layouts[name]; ok {
 		for position, _ := range this.App.Layouts[name] {
@@ -82,7 +103,7 @@ func (this *AppCfg) GetLayout(name string) map[string][]string {
 }
 
 // Populates the defaults for the application configuration.
-func (this *AppCfg) init() {
+func (this *Config) init() {
 
 	// Defaults for the page level configuration.
 	this.App.Page.BaseUrl = "/"
@@ -116,7 +137,4 @@ func (this *AppCfg) init() {
 
 	// Instantiate the Map of all available components.
 	this.Components = map[string]func(*f.Request, *f.Response, func()){}
-
-	// Register any default components.
-	registerDefaultComponents(this)
 }

@@ -16,8 +16,8 @@ import (
 // Render the requested layout wrapped using a theme.
 func Render(req *f.Request, res *f.Response, next func()) {
 
-	// Get the AppCfg from the req.Map.
-	cfg := req.Map["cfg"].(*AppCfg)
+	// Get the Config from the req.Map.
+	cfg := req.Map["cfg"].(*Config)
 
 	// If "juxskip" is set then just reander the requested component.
 	if _, ok := req.Query["juxskip"]; ok {

@@ -1,4 +1,4 @@
-package publictheme
+package public_theme
 
 import (
 	"github.com/ricallinson/forgery"
@@ -8,17 +8,17 @@ import (
 // Page theme.
 func Template(req *f.Request, res *f.Response, next func()) {
 	asset := assets.New(res.Locals)
-	asset.AddCss("/publictheme/bootstrap/css/bootstrap.min.css")
-	asset.AddCss("/publictheme/css/screen.css")
+	asset.AddCss("/public_theme/bootstrap/css/bootstrap.min.css")
+	asset.AddCss("/public_theme/css/screen.css")
 	asset.Render()
-	res.Render("publictheme/main.html")
+	res.Render("public_theme/main.html")
 }
 
 // Fall back 404 page.
 func FourOFour(req *f.Request, res *f.Response, next func()) {
 	asset := assets.New(res.Locals)
-	asset.AddCss("/publictheme/bootstrap/css/bootstrap.min.css")
-	asset.AddCss("/publictheme/css/screen.css")
+	asset.AddCss("/public_theme/bootstrap/css/bootstrap.min.css")
+	asset.AddCss("/public_theme/css/screen.css")
 	asset.Render()
-	res.Render("publictheme/404.html")
+	res.Render("public_theme/404.html")
 }

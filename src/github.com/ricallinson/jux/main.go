@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func Start(cfg *AppCfg) {
+func Start(cfg *Config) {
 
 	// Create a Forgery Server.
 	app := f.CreateServer()

@@ -1,4 +1,4 @@
-package notfound
+package not_found
 
 import (
 	"github.com/ricallinson/forgery"
@@ -6,7 +6,7 @@ import (
 
 // Standard not found handler.
 func Handler(req *f.Request, res *f.Response, next func()) {
-	res.Render("notfound/main.html", map[string]string{
+	res.Render("not_found/main.html", map[string]string{
 		"error": "Component not found.",
 	})
 }

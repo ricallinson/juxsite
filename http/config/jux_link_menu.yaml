@@ -1,0 +1,8 @@
+match:
+  '*':
+    title: Main Menu
+    links:
+    - uri: /
+      text: Home
+    - uri: /?category=alice
+      text: Alice's Adventures in Wonderland

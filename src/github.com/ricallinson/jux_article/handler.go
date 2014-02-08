@@ -90,6 +90,6 @@ func Menu(req *f.Request, res *f.Response, next func()) {
 	res.Render("jux_article/menu.html", map[string][]*Article{
 		"links": articles,
 	}, map[string]string{
-		"title": "Articles",
+		"title": "Category Articles",
 	})
 }
