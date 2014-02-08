@@ -7,16 +7,14 @@ import (
 	"github.com/ricallinson/forgery"
 )
 
-func debug(maps ...map[string]string) string {
-	for i, _ := range maps {
-		for k, v := range maps[i] {
-			maps[0][k] = v
-		}
-	}
-	debug, _ := json.MarshalIndent(maps[0], "", "    ")
-	return string(debug)
-}
-
+// Query parameters that effect the final rendered output.
+//
+// juxmode - Either "public" or "admin".
+// juxcomp - The component to use in layout position "maincontent".
+// juxview - The view to use with the layout position "maincontent".
+// juxskip - Skip rendering the layout and render only the requested "juxcomp" & "juxview".
+//
+// Render the requested layout wrapped using a theme.
 func Render(req *f.Request, res *f.Response, next func()) {
 
 	// Get the AppCfg from the req.Map.

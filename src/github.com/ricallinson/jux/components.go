@@ -7,7 +7,7 @@ import (
 	"github.com/ricallinson/jux_article"
 )
 
-// Register all default components.
+// Register default components.
 func registerDefaultComponents(cfg *AppCfg) {
 	cfg.RegisterComponent("notfound", notfound.Handler)
 	cfg.RegisterComponent("publictheme", publictheme.Template)

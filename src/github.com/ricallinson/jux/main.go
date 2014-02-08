@@ -11,16 +11,21 @@ import (
 
 func Start(cfg *AppCfg) {
 
+	// Create a Forgery Server.
 	app := f.CreateServer()
 
+	// Add Starkr middleware.
 	app.Use(f.ResponseTime())
 	app.Use(f.Favicon())
 	app.Use(f.Static())
 
+	// Set the render engine.
 	app.Engine(".html", fmustache.Make())
 
-	// Set template locals.
+	// Set the Stackr environment.
 	app.Env = cfg.App.Defaults.Env
+
+	// Set template locals.
 	app.Locals["baseUrl"] = cfg.App.Page.BaseUrl
 	app.Locals["siteName"] = cfg.App.Page.Name
 	app.Locals["siteDescription"] = cfg.App.Page.Description
@@ -86,5 +91,6 @@ func Start(cfg *AppCfg) {
 		Render(req, res, next)
 	})
 
+	// Handle the application.
 	http.Handle("/", app)
 }

@@ -8,7 +8,7 @@ import (
 
 type AppCfg struct {
 	App struct {
-		// Page configuration.
+		// Page level configuration keys.
 		Page struct {
 			BaseUrl     string
 			Name        string
@@ -17,7 +17,7 @@ type AppCfg struct {
 			Direction   string
 		}
 
-		// Default values at the application level.
+		// Application level configuration keys.
 		Defaults struct {
 			Env                string
 			Debug              bool
@@ -65,12 +65,12 @@ func (this *AppCfg) String() string {
 	return string(data)
 }
 
-// Register a new component.
+// Registers a new component with the application.
 func (this *AppCfg) RegisterComponent(name string, fn func(*f.Request, *f.Response, func())) {
 	this.Components[name] = fn
 }
 
-// returns a copy of the matched layout or an empty map.
+// Returns a copy of the matched layout or an empty map.
 func (this *AppCfg) GetLayout(name string) map[string][]string {
 	layout := map[string][]string{}
 	if _, ok := this.App.Layouts[name]; ok {
@@ -81,15 +81,17 @@ func (this *AppCfg) GetLayout(name string) map[string][]string {
 	return layout
 }
 
-// Populates the defaults for the configuration.
+// Populates the defaults for the application configuration.
 func (this *AppCfg) init() {
 
+	// Defaults for the page level configuration.
 	this.App.Page.BaseUrl = "/"
 	this.App.Page.Name = "Jux"
 	this.App.Page.Description = ""
 	this.App.Page.Lang = "en"
 	this.App.Page.Direction = "ltr"
 
+	// Defaults for the application level configuration.
 	this.App.Defaults.Debug = false
 	this.App.Defaults.Env = "development"
 	this.App.Defaults.Theme = "publictheme"
@@ -106,7 +108,7 @@ func (this *AppCfg) init() {
 	this.App.Layouts["public"] = map[string][]string{
 		// "position-01": {""}, // Bread crumbs.
 		"position-03": {"a", "article_menu"}, // Menu and Login.
-		// "position-04": {"f"},                      // Sample error.
+		// "position-04": {"f"}, // Sample error.
 	}
 
 	// Create the default "admin" layout.
