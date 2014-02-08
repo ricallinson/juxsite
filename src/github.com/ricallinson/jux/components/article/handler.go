@@ -53,5 +53,8 @@ func read(req *f.Request, res *f.Response, next func()) {
 
 // Shows a list of articles for the given category.
 func listJson(req *f.Request, res *f.Response, next func()) {
-	res.Json(ListArticles(req, 0, 100))
+	batch := 5
+	start, _ := strconv.Atoi(req.Query["start"])
+	articles, _ := ListArticles(req, start, start+batch)
+	res.Json(articles)
 }
