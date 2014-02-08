@@ -33,6 +33,7 @@ func GetFileDataStore(req *f.Request, dirname string) *FileDataStore {
 	return ds
 }
 
+// Read all files in the given "table" directory and store them in &FileDataStore{}.
 func (this *FileDataStore) fillCache(table string) {
 	this.ArticlesMap = map[string]*Article{}
 	dirname := path.Join(this.Root, table)
@@ -42,30 +43,33 @@ func (this *FileDataStore) fillCache(table string) {
 	}
 	for _, file := range list {
 		if file.IsDir() != true {
-			article := &Article{Id: file.Name()}
-			if this.readFile(table, article) {
+			filepath := path.Join(this.Root, table, file.Name())
+			if article, ok := this.readFile(filepath); ok {
+				article.Id = file.Name()
 				this.ArticlesMap[article.Id] = article
 			}
 		}
 	}
 }
 
-func (this *FileDataStore) readFile(table string, article *Article) bool {
-	filename := path.Join(this.Root, table, article.Id)
-	j, err1 := ioutil.ReadFile(filename)
+// Read the JSON file at given "filepath" into an &Article{}.
+func (this *FileDataStore) readFile(filepath string) (*Article, bool) {
+	article := &Article{}
+	j, err1 := ioutil.ReadFile(filepath)
 	if err1 != nil {
 		// panic(err1)
-		return false
+		return article, false
 	}
 	err2 := json.Unmarshal(j, &article)
 	if err2 != nil {
 		// panic(err2)
-		return false
+		return article, false
 	}
-	return true
+	return article, true
 }
 
-func (this *FileDataStore) LoadTable(table string, category string, from int, to int) (Articles, int) {
+//
+func (this *FileDataStore) GetTable(table string, category string, from int, to int) (Articles, int) {
 	if this.ArticlesMap == nil {
 		this.fillCache(table)
 	}
@@ -86,7 +90,7 @@ func (this *FileDataStore) LoadTable(table string, category string, from int, to
 	return articles[from:to], count
 }
 
-func (this *FileDataStore) LoadItem(table string, id string) (*Article, bool) {
+func (this *FileDataStore) GetItem(table string, id string) (*Article, bool) {
 	if this.ArticlesMap == nil {
 		this.fillCache(table)
 	}

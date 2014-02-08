@@ -15,7 +15,7 @@ type Article struct {
 
 func ListArticles(req *f.Request, category string, from int, to int) ([]*Article, int) {
 	ds := GetFileDataStore(req, "data")
-	return ds.LoadTable("articles", category, from, to)
+	return ds.GetTable("articles", category, from, to)
 }
 
 func (this *Article) Create(req *f.Request) error {
@@ -24,7 +24,7 @@ func (this *Article) Create(req *f.Request) error {
 
 func (this *Article) Read(req *f.Request) error {
 	ds := GetFileDataStore(req, "data")
-	if article, ok := ds.LoadItem("articles", this.Id); ok {
+	if article, ok := ds.GetItem("articles", this.Id); ok {
 		// This is a hack, need to work out why "this = article" fails.
 		this.Title = article.Title
 		this.Category = article.Category
