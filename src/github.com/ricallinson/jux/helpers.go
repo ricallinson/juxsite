@@ -6,9 +6,15 @@ import (
 	"launchpad.net/goyaml"
 )
 
-// Returns the jux.Config from the given req.Map["cfg"].
-func GetConfig(req *f.Request) *Config {
-	return req.Map["cfg"].(*Config)
+// Creates a new site instance and returns it.
+func New() *Site {
+	site := &Site{}
+	return site
+}
+
+// Returns the jux.Site from the given req.Map["juxsite"].
+func GetSite(req *f.Request) *Site {
+	return req.Map["juxsite"].(*Site)
 }
 
 // Return the given interface as a YAML string.
@@ -16,6 +22,7 @@ func ToYaml(i interface{}) []byte {
 	data, err1 := goyaml.Marshal(i)
 	if err1 != nil {
 		panic(err1)
+		return []byte{}
 	}
 	return data
 }
@@ -26,17 +33,22 @@ func FromYaml(yaml []byte, i interface{}) {
 	err2 := goyaml.Unmarshal(yaml, i)
 	if err2 != nil {
 		panic(err2)
-		return // error
+		return
 	}
+}
+
+// Read the given file and return a byte slice.
+func FromFile(filepath string) []byte {
+	// Read the source file.
+	file, err1 := ioutil.ReadFile(filepath)
+	if err1 != nil {
+		// panic(err1)
+		return []byte("Not found.")
+	}
+	return file
 }
 
 // Read the given YAML file into the given interface.
 func FromYamlFile(filepath string, i interface{}) {
-	// Read the source file.
-	yaml, err1 := ioutil.ReadFile(filepath)
-	if err1 != nil {
-		panic(err1)
-		return // error
-	}
-	FromYaml(yaml, i)
+	FromYaml(FromFile(filepath), i)
 }

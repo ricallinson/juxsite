@@ -9,7 +9,7 @@ func Handler(req *f.Request, res *f.Response, next func()) {
 	// Create a Config instance.
 	cfg := &Config{}
 	// Load the YAML configuration into the Config instance.
-	jux.GetConfig(req).Get("jux_link_menu", cfg)
+	jux.GetSite(req).GetConfig("jux_link_menu", cfg)
 	// Create a slice to hold the links.
 	menu := Menu{}
 	// Look for a match in the configuration we loaded.

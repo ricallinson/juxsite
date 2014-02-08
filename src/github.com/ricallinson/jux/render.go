@@ -17,16 +17,16 @@ import (
 func Render(req *f.Request, res *f.Response, next func()) {
 
 	// Get the Config from the req.Map.
-	cfg := req.Map["cfg"].(*Config)
+	site := req.Map["juxsite"].(*Site)
 
 	// If "juxskip" is set then just reander the requested component.
 	if _, ok := req.Query["juxskip"]; ok {
-		cfg.GetComponent(req.Params["juxcomp"])(req, res, next)
+		site.GetComponent(req.Params["juxcomp"])(req, res, next)
 		return
 	}
 
 	// Based on "juxmode" we need to pick a layout.
-	layout := cfg.GetLayout(req.Params["juxmode"])
+	layout := site.GetLayout(req.Params["juxmode"])
 	layout["maincontent"] = []string{req.Params["juxcomp"]}
 	composite := fcomposite.Map{}
 	count := 0
@@ -34,7 +34,7 @@ func Render(req *f.Request, res *f.Response, next func()) {
 	// Walk over the layout and fill the fcomposite.Map{}.
 	for pos, names := range layout {
 		for _, name := range names {
-			composite[pos+strconv.Itoa(count)] = cfg.GetComponent(name)
+			composite[pos+strconv.Itoa(count)] = site.GetComponent(name)
 			count++
 		}
 	}
@@ -53,11 +53,11 @@ func Render(req *f.Request, res *f.Response, next func()) {
 	}
 
 	// Based on "juxmode" we need to pick a theme.
-	theme := cfg.App.Defaults.Theme
+	theme := site.Config.Defaults.Theme
 	if req.Params["juxmode"] == "admin" {
-		theme = cfg.App.Defaults.AdminTheme
+		theme = site.Config.Defaults.AdminTheme
 	}
 
 	// Render the final component.
-	cfg.Components[theme](req, res, next)
+	site.Components[theme](req, res, next)
 }
