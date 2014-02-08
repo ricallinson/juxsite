@@ -2,8 +2,6 @@ package jux
 
 import (
 	"github.com/ricallinson/forgery"
-	"io/ioutil"
-	"launchpad.net/goyaml"
 	"path"
 )
 
@@ -38,59 +36,33 @@ type Config struct {
 	Components map[string]func(*f.Request, *f.Response, func())
 }
 
-// Read the given YAML file into the given Interface.
-func (this *Config) readFile(filepath string, i interface{}) {
-	// Read the source file.
-	data, err1 := ioutil.ReadFile(filepath)
-	if err1 != nil {
-		panic(err1)
-		return // error
-	}
-	// Unmarshal the source into this Config instance.
-	// This overrides any default settings from the init() call.
-	err2 := goyaml.Unmarshal([]byte(data), i)
-	if err2 != nil {
-		panic(err2)
-		return // error
-	}
-}
-
-// Returns the jux.Config from the give req.Map["cfg"].
-func GetConfig(req *f.Request) *Config {
-	return req.Map["cfg"].(*Config)
-}
-
-// Load the application configuration from the give YAML file.
+// Load the application configuration from the given YAML file.
 func (this *Config) Load() /*(error)*/ {
-	// Prime this Config instance.
-	this.init()
 	filename := path.Join("config", "site.yaml")
-	this.readFile(filename, &this.App)
+	FromYamlFile(filename, &this.App)
 }
 
-// Return the application configuration as a YAML string.
-func (this *Config) ToYaml(i interface{}) string {
-	data, err1 := goyaml.Marshal(i)
-	if err1 != nil {
-		panic(err1)
+// Registers a new component with the application.
+func (this *Config) RegisterComponent(name string, fn func(*f.Request, *f.Response, func())) {
+	if this.Components == nil {
+		// Instantiate the Map of all available components.
+		this.Components = map[string]func(*f.Request, *f.Response, func()){}
 	}
-	return string(data)
+	this.Components[name] = fn
 }
 
 // Read the config file for the given component name.
 func (this *Config) Get(name string, i interface{}) {
 	filepath := path.Join("config", name+".yaml")
-	this.readFile(filepath, i)
+	FromYamlFile(filepath, i)
 }
 
-// Return the configuration as a YAML string.
-func (this *Config) String() string {
-	return this.ToYaml(this.App)
-}
-
-// Registers a new component with the application.
-func (this *Config) RegisterComponent(name string, fn func(*f.Request, *f.Response, func())) {
-	this.Components[name] = fn
+// Returns a copy of the matched component or the Not_Found Component.
+func (this *Config) GetComponent(name string) func(*f.Request, *f.Response, func()) {
+	if component, ok := this.Components[name]; ok {
+		return component
+	}
+	return this.Components["not_found"]
 }
 
 // Returns a copy of the matched layout or an empty map.
@@ -104,39 +76,7 @@ func (this *Config) GetLayout(name string) map[string][]string {
 	return layout
 }
 
-// Populates the defaults for the application configuration.
-func (this *Config) init() {
-
-	// Defaults for the page level configuration.
-	this.App.Page.BaseUrl = "/"
-	this.App.Page.Name = "Jux"
-	this.App.Page.Description = ""
-	this.App.Page.Lang = "en"
-	this.App.Page.Direction = "ltr"
-
-	// Defaults for the application level configuration.
-	this.App.Defaults.Debug = false
-	this.App.Defaults.Env = "development"
-	this.App.Defaults.Theme = "public_theme" // this is a component
-	this.App.Defaults.Component = "article"
-	this.App.Defaults.ComponentView = "main"
-	this.App.Defaults.AdminTheme = "admin_theme" // this is a component
-	this.App.Defaults.AdminComponent = "dashboard"
-	this.App.Defaults.AdminComponentView = "main"
-
-	// Instantiate the Map of layouts.
-	this.App.Layouts = map[string]map[string][]string{}
-
-	// Create the default "public" layout.
-	this.App.Layouts["public"] = map[string][]string{
-		"position-03": {"link_menu", "article_menu"}, // Menu and Login.
-	}
-
-	// Create the default "admin" layout.
-	this.App.Layouts["admin"] = map[string][]string{
-		"position-01": {"f"}, // Sample error.
-	}
-
-	// Instantiate the Map of all available components.
-	this.Components = map[string]func(*f.Request, *f.Response, func()){}
+// Return the configuration as a YAML string.
+func (this *Config) String() string {
+	return string(ToYaml(this.App))
 }

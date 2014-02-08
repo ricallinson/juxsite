@@ -1,4 +1,23 @@
 page:
-  baseurl: "/"
-  name: "Jux Site"
-  description: "Non enim vos estis"
+  baseurl: /
+  name: Jux Site
+  description: Non enim vos estis
+  lang: en
+  direction: ltr
+defaults:
+  env: development
+  debug: false
+  theme: public_theme
+  component: article
+  componentview: main
+  admintheme: admin_theme
+  admincomponent: dashboard
+  admincomponentview: main
+layouts:
+  admin:
+    position-01:
+    - f
+  public:
+    position-03:
+    - link_menu
+    - article_menu

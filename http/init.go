@@ -14,7 +14,7 @@ func init() {
 	// Load the local configuration file.
 	cfg.Load()
 	// Register components.
-	cfg.RegisterComponent("notfound", not_found.Handler)
+	cfg.RegisterComponent("not_found", not_found.Handler)
 	cfg.RegisterComponent("article", jux_article.Handler)
 	cfg.RegisterComponent("article_menu", jux_article.Menu)
 	cfg.RegisterComponent("link_menu", jux_link_menu.Handler)
