@@ -2,7 +2,7 @@ package publictheme
 
 import (
 	"github.com/ricallinson/forgery"
-	"github.com/ricallinson/jux/assets"
+	"github.com/ricallinson/jux/helpers/assets"
 )
 
 // Page theme.

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/ricallinson/fmustache"
 	"github.com/ricallinson/forgery"
-	"github.com/ricallinson/jux/secure"
+	"github.com/ricallinson/jux/helpers/secure"
 	"net/http"
 	"time"
 )
