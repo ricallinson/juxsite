@@ -16,7 +16,8 @@ type Article struct {
 
 func ListArticles(req *f.Request, category string, from int, to int) ([]*Article, int) {
 	// c := appengine.NewContext(req.Request.Request)
-	return loadArticles("data/articles", category, from, to)
+	ds := CreateDataStore("data")
+	return ds.LoadTable("articles", category, from, to)
 }
 
 func (this *Article) Create(req *f.Request) error {
@@ -26,7 +27,8 @@ func (this *Article) Create(req *f.Request) error {
 
 func (this *Article) Read(req *f.Request) error {
 	// c := appengine.NewContext(req.Request.Request)
-	if loadArticle("data/articles", this) == false {
+	ds := CreateDataStore("data")
+	if ds.LoadItem("articles", this) == false {
 		return errors.New("Article not found.")
 	}
 	return nil

@@ -2,14 +2,23 @@ package article
 
 import (
 	"encoding/json"
-	"github.com/russross/blackfriday"
 	"io/ioutil"
 	"path"
-	"strings"
 )
 
-func loadArticles(dirname string, category string, from int, to int) ([]*Article, int) {
+type DataStore struct {
+	Root string
+}
+
+func CreateDataStore(dirname string) *DataStore {
+	ds := &DataStore{}
+	ds.Root = dirname
+	return ds
+}
+
+func (this *DataStore) LoadTable(table string, category string, from int, to int) ([]*Article, int) {
 	articles := []*Article{}
+	dirname := path.Join(this.Root, table)
 	list, err := ioutil.ReadDir(dirname)
 	if err != nil {
 		// panic(err)
@@ -26,7 +35,7 @@ func loadArticles(dirname string, category string, from int, to int) ([]*Article
 		file := list[i]
 		if file.IsDir() != true {
 			article := &Article{Id: file.Name()}
-			if loadArticle(dirname, article) {
+			if this.LoadItem(table, article) {
 				if category == "" || article.Category == category {
 					articles = append(articles, article)
 				}
@@ -36,8 +45,8 @@ func loadArticles(dirname string, category string, from int, to int) ([]*Article
 	return articles, count
 }
 
-func loadArticle(dirname string, article *Article) bool {
-	filename := path.Join(dirname, article.Id)
+func (this *DataStore) LoadItem(table string, article *Article) bool {
+	filename := path.Join(this.Root, table, article.Id)
 	j, err1 := ioutil.ReadFile(filename)
 	if err1 != nil {
 		// panic(err1)
@@ -48,9 +57,5 @@ func loadArticle(dirname string, article *Article) bool {
 		// panic(err2)
 		return false
 	}
-	if line := strings.Index(article.Text, "\r\n"); line > 0 {
-		article.Summary = string(blackfriday.MarkdownBasic([]byte(article.Text[:line])))
-	}
-	article.Text = string(blackfriday.MarkdownBasic([]byte(article.Text)))
 	return true
 }

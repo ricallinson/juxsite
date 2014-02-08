@@ -35,6 +35,9 @@ type AppCfg struct {
 
 	// Map of all available components.
 	Components map[string]func(*f.Request, *f.Response, func())
+
+	// Data connector
+	DataConnector *interface{}
 }
 
 // Load the configuration from the give YAML file.
@@ -95,8 +98,8 @@ func (this *AppCfg) init() {
 	this.App.Defaults.Theme = "publictheme"
 	this.App.Defaults.Component = "article"
 	this.App.Defaults.ComponentView = "main"
-	this.App.Defaults.AdminTheme = "default"
-	this.App.Defaults.AdminComponent = "f"
+	this.App.Defaults.AdminTheme = "admintheme"
+	this.App.Defaults.AdminComponent = "dashboard"
 	this.App.Defaults.AdminComponentView = "main"
 
 	// Instantiate the Map of layouts.

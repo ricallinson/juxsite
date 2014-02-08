@@ -2,6 +2,7 @@ package article
 
 import (
 	"github.com/ricallinson/forgery"
+	"github.com/russross/blackfriday"
 	"strconv"
 	"strings"
 )
@@ -26,6 +27,12 @@ func list(req *f.Request, res *f.Response, next func()) {
 	articles, count := ListArticles(req, category, start, start+batch)
 	less := start - batch
 	more := start + batch
+	// Render the Summary as HTML.
+	for _, article := range articles {
+		if line := strings.Index(article.Text, "\r\n"); line > 0 {
+			article.Summary = string(blackfriday.MarkdownBasic([]byte(article.Text[:line])))
+		}
+	}
 	res.Render("article/list.html", map[string][]*Article{
 		"articles": articles,
 	}, map[string]string{
@@ -38,7 +45,7 @@ func list(req *f.Request, res *f.Response, next func()) {
 	})
 }
 
-// Shows a list of articles for the given category.
+// Shows the single article for the given id.
 func read(req *f.Request, res *f.Response, next func()) {
 	article := &Article{Id: req.Query["id"]}
 	if article.Id == "" || article.Read(req) != nil {
@@ -48,6 +55,8 @@ func read(req *f.Request, res *f.Response, next func()) {
 		return
 	}
 	res.Locals["pageTitle"] = article.Title
+	// Render the text as HTML.
+	article.Text = string(blackfriday.MarkdownBasic([]byte(article.Text)))
 	res.Render("article/read.html", map[string][]*Article{
 		"articles": []*Article{article},
 	})
