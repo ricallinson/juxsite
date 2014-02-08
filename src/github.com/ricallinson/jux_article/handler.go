@@ -2,6 +2,7 @@ package jux_article
 
 import (
 	"github.com/ricallinson/forgery"
+	"github.com/ricallinson/jux/helpers/assets"
 	"github.com/russross/blackfriday"
 	"strconv"
 	"strings"
@@ -21,6 +22,9 @@ func Handler(req *f.Request, res *f.Response, next func()) {
 
 // Shows a list of articles for the given category.
 func list(req *f.Request, res *f.Response, next func()) {
+	// Should this be in a config?
+	asset := assets.New(res.Locals)
+	asset.AddCss("/jux_article/css/screen.css")
 	// First fetch all the params needed.
 	batch := 5
 	start, _ := strconv.Atoi(req.Query["start"])

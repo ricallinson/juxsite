@@ -6,7 +6,7 @@
         <p>{{{Summary}}}</p>
     </div>
     {{/articles}}
-    <div>
+    <div class="paging">
         {{#show_less}}<a type="button" class="btn btn-default" href="/article?start={{less}}&amp;category={{category}}">Less</a>{{/show_less}}
         {{#show_more}}<a type="button" class="btn btn-default pull-right" href="/article?start={{more}}&amp;category={{category}}">More</a>{{/show_more}}
     </div>
