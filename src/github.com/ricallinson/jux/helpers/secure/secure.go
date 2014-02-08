@@ -11,7 +11,7 @@ func UserAuth(req *f.Request, res *f.Response, next func()) {
 	context := appengine.NewContext(req.Request.Request)
 	u := user.Current(context)
 	if u == nil {
-		url, _ := user.LoginURL(context, "/")
+		url, _ := user.LoginURL(context, req.Url)
 		res.Redirect(url)
 		return
 	}
@@ -23,7 +23,7 @@ func AdminAuth(req *f.Request, res *f.Response, next func()) {
 	context := appengine.NewContext(req.Request.Request)
 	u := user.Current(context)
 	if u == nil || user.IsAdmin(context) == false {
-		url, _ := user.LoginURL(context, "/")
+		url, _ := user.LoginURL(context, req.Url)
 		res.Redirect(url)
 		return
 	}

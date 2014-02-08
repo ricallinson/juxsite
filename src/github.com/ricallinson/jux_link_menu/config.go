@@ -10,6 +10,4 @@ type Menu struct {
 	Links []Link
 }
 
-type Config struct {
-	Match map[string]Menu
-}
+type Config map[string]Menu

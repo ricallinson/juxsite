@@ -14,7 +14,12 @@ func New() *Site {
 
 // Returns the jux.Site from the given req.Map["juxsite"].
 func GetSite(req *f.Request) *Site {
-	return req.Map["juxsite"].(*Site)
+	return req.Map[JuxSite].(*Site)
+}
+
+// Returns the Layout Map position for the current component.
+func GetPosition(req *f.Request) string {
+	return req.Params["fcomposite_id"][0:PositionSize]
 }
 
 // Return the given interface as a YAML string.
