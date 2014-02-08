@@ -15,8 +15,10 @@ type FileDataStore struct {
 	ArticlesMap map[string]*Article
 }
 
+// A slice of Articles.
 type Articles []*Article
 
+// Sort methdos for Articles.
 func (a Articles) Len() int           { return len(a) }
 func (a Articles) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a Articles) Less(i, j int) bool { return a[i].Id < a[j].Id }
@@ -68,7 +70,7 @@ func (this *FileDataStore) readFile(filepath string) (*Article, bool) {
 	return article, true
 }
 
-//
+// Returns a list of all items in the given "table".
 func (this *FileDataStore) GetTable(table string, category string, from int, to int) (Articles, int) {
 	if this.ArticlesMap == nil {
 		this.fillCache(table)
@@ -90,6 +92,7 @@ func (this *FileDataStore) GetTable(table string, category string, from int, to 
 	return articles[from:to], count
 }
 
+// Returns a single item identified by the given "id".
 func (this *FileDataStore) GetItem(table string, id string) (*Article, bool) {
 	if this.ArticlesMap == nil {
 		this.fillCache(table)

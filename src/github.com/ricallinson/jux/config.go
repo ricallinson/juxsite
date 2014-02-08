@@ -104,9 +104,9 @@ func (this *AppCfg) init() {
 
 	// Create the default "public" layout.
 	this.App.Layouts["public"] = map[string][]string{
-		// "position-01": {"a"}, // Bread crumbs.
-		"position-03": {"a", "article_menu", "b"}, // Menu and Login.
-		"position-04": {"f"},                      // Sample error.
+		// "position-01": {""}, // Bread crumbs.
+		"position-03": {"a", "article_menu"}, // Menu and Login.
+		// "position-04": {"f"},                      // Sample error.
 	}
 
 	// Create the default "admin" layout.

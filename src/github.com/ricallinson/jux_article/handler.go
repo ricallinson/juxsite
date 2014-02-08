@@ -45,7 +45,7 @@ func list(req *f.Request, res *f.Response, next func()) {
 	})
 }
 
-// Shows the single article for the given id.
+// Shows a single article for the given id.
 func read(req *f.Request, res *f.Response, next func()) {
 	article := &Article{Id: req.Query["id"]}
 	if article.Id == "" || article.Read(req) != nil {
@@ -62,11 +62,25 @@ func read(req *f.Request, res *f.Response, next func()) {
 	})
 }
 
-// Shows a list of articles for the given category.
+// Shows a JSON Object that is a list of articles for the given category.
 func listJson(req *f.Request, res *f.Response, next func()) {
 	batch := 5
 	start, _ := strconv.Atoi(req.Query["start"])
 	category := strings.ToLower(req.Query["category"])
 	articles, _ := ListArticles(req, category, start, start+batch)
 	res.Json(articles)
+}
+
+// Route the request to the correct handler function.
+func Menu(req *f.Request, res *f.Response, next func()) {
+	if req.Params["juxview"] != "article" && req.Params["juxview"] != "read" {
+		return
+	}
+	category := req.Query["category"]
+	articles, _ := ListArticles(req, category, 0, 100)
+	res.Render("jux_article/menu.html", map[string][]*Article{
+		"links": articles,
+	}, map[string]string{
+		"title": "All Articles",
+	})
 }
