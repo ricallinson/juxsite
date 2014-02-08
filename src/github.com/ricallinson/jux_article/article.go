@@ -24,10 +24,15 @@ func (this *Article) Create(req *f.Request) error {
 
 func (this *Article) Read(req *f.Request) error {
 	ds := GetFileDataStore(req, "data")
-	if ds.LoadItem("articles", this) == false {
-		return errors.New("Article not found.")
+	if article, ok := ds.LoadItem("articles", this.Id); ok {
+		// This is a hack, need to work out why "this = article" fails.
+		this.Title = article.Title
+		this.Category = article.Category
+		this.Summary = article.Summary
+		this.Text = article.Text
+		return nil
 	}
-	return nil
+	return errors.New("Article not found.")
 }
 
 func (this *Article) Update(req *f.Request) error {
