@@ -9,13 +9,10 @@ import (
 )
 
 func init() {
-
-	// Create a Jux Configuration.
+	// Create a Jux Configuration instance.
 	cfg := &jux.Config{}
-
-	// Load the localconfiguration file.
-	cfg.Load("site.yaml")
-
+	// Load the local configuration file.
+	cfg.Load()
 	// Register components.
 	cfg.RegisterComponent("notfound", not_found.Handler)
 	cfg.RegisterComponent("article", jux_article.Handler)
@@ -23,6 +20,6 @@ func init() {
 	cfg.RegisterComponent("link_menu", jux_link_menu.Handler)
 	cfg.RegisterComponent("public_theme", public_theme.Template)
 	cfg.RegisterComponent("public_404", public_theme.FourOFour)
-
+	// Start the application.
 	jux.Start(cfg)
 }

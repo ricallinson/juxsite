@@ -61,10 +61,11 @@ func GetConfig(req *f.Request) *Config {
 }
 
 // Load the application configuration from the give YAML file.
-func (this *Config) Load(filepath string) /*(error)*/ {
+func (this *Config) Load() /*(error)*/ {
 	// Prime this Config instance.
 	this.init()
-	this.readFile(filepath, &this.App)
+	filename := path.Join("config", "site.yaml")
+	this.readFile(filename, &this.App)
 }
 
 // Return the application configuration as a YAML string.
