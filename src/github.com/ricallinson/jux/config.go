@@ -35,9 +35,6 @@ type AppCfg struct {
 
 	// Map of all available components.
 	Components map[string]func(*f.Request, *f.Response, func())
-
-	// Data connector
-	DataConnector *interface{}
 }
 
 // Load the configuration from the give YAML file.

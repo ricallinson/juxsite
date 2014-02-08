@@ -1,22 +1,28 @@
-package article
+package jux_article
 
 import (
 	"encoding/json"
+	"github.com/ricallinson/forgery"
 	"io/ioutil"
 	"path"
 )
 
-type DataStore struct {
+type FileDataStore struct {
 	Root string
 }
 
-func CreateDataStore(dirname string) *DataStore {
-	ds := &DataStore{}
+func GetFileDataStore(req *f.Request, dirname string) *FileDataStore {
+	key := "filedatastore-" + dirname
+	if ds, ok := req.Map[key]; ok {
+		return ds.(*FileDataStore)
+	}
+	ds := &FileDataStore{}
 	ds.Root = dirname
+	req.Map[key] = ds
 	return ds
 }
 
-func (this *DataStore) LoadTable(table string, category string, from int, to int) ([]*Article, int) {
+func (this *FileDataStore) LoadTable(table string, category string, from int, to int) ([]*Article, int) {
 	articles := []*Article{}
 	dirname := path.Join(this.Root, table)
 	list, err := ioutil.ReadDir(dirname)
@@ -45,7 +51,7 @@ func (this *DataStore) LoadTable(table string, category string, from int, to int
 	return articles, count
 }
 
-func (this *DataStore) LoadItem(table string, article *Article) bool {
+func (this *FileDataStore) LoadItem(table string, article *Article) bool {
 	filename := path.Join(this.Root, table, article.Id)
 	j, err1 := ioutil.ReadFile(filename)
 	if err1 != nil {

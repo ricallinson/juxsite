@@ -1,4 +1,4 @@
-package article
+package jux_article
 
 import (
 	"github.com/ricallinson/forgery"
