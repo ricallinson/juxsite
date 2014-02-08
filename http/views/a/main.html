@@ -1,8 +1,10 @@
 <div class="panel panel-default">
 	<div class="panel-heading">{{title}}</div>
 	<div class="panel-body">
-		{{#links}}
-		<a href="{{Uri}}">{{Text}}</a>
-		{{/links}}
+        <ul class="unstyled">
+    		{{#links}}
+    		<li><a href="{{Uri}}">{{Text}}</a></li>
+    		{{/links}}
+        </ul>
 	</div>
 </div>

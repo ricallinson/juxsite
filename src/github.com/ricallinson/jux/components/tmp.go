@@ -20,6 +20,10 @@ func AHandler(req *f.Request, res *f.Response, next func()) {
 					Uri:  "/",
 					Text: "Home",
 				},
+				Link{
+					Uri:  "/?category=alice",
+					Text: "Alice's Adventures in Wonderland",
+				},
 			},
 		})
 }

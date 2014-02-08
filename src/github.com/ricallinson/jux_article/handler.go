@@ -21,9 +21,15 @@ func Handler(req *f.Request, res *f.Response, next func()) {
 
 // Shows a list of articles for the given category.
 func list(req *f.Request, res *f.Response, next func()) {
+	// First fetch all the params needed.
 	batch := 5
 	start, _ := strconv.Atoi(req.Query["start"])
 	category := strings.ToLower(req.Query["category"])
+	// If "category" is empty check the config.
+	if len(category) == 0 {
+		category = "general"
+	}
+	// Get the list of articles matching the request.
 	articles, count := ListArticles(req, category, start, start+batch)
 	less := start - batch
 	more := start + batch
