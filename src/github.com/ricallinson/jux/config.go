@@ -55,15 +55,25 @@ func (this *Config) readFile(filepath string, i interface{}) {
 	}
 }
 
+// Returns the jux.Config from the give req.Map["cfg"].
 func GetConfig(req *f.Request) *Config {
 	return req.Map["cfg"].(*Config)
 }
 
-// Load the configuration from the give YAML file.
+// Load the application configuration from the give YAML file.
 func (this *Config) Load(filepath string) /*(error)*/ {
 	// Prime this Config instance.
 	this.init()
 	this.readFile(filepath, &this.App)
+}
+
+// Return the application configuration as a YAML string.
+func (this *Config) ToYaml(i interface{}) string {
+	data, err1 := goyaml.Marshal(i)
+	if err1 != nil {
+		panic(err1)
+	}
+	return string(data)
 }
 
 // Read the config file for the given component name.
@@ -75,15 +85,6 @@ func (this *Config) Get(name string, i interface{}) {
 // Return the configuration as a YAML string.
 func (this *Config) String() string {
 	return this.ToYaml(this.App)
-}
-
-// Return the configuration as a YAML string.
-func (this *Config) ToYaml(i interface{}) string {
-	data, err1 := goyaml.Marshal(i)
-	if err1 != nil {
-		panic(err1)
-	}
-	return string(data)
 }
 
 // Registers a new component with the application.
