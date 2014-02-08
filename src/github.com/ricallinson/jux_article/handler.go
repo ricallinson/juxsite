@@ -29,9 +29,11 @@ func list(req *f.Request, res *f.Response, next func()) {
 	more := start + batch
 	// Render the Summary as HTML.
 	for _, article := range articles {
-		if line := strings.Index(article.Text, "\r\n"); line > 0 {
-			article.Summary = string(blackfriday.MarkdownBasic([]byte(article.Text[:line])))
+		line := strings.Index(article.Text, "\r\n")
+		if line == -1 {
+			line = len(article.Text)
 		}
+		article.Summary = string(blackfriday.MarkdownBasic([]byte(article.Text[:line])))
 	}
 	res.Render("jux_article/list.html", map[string][]*Article{
 		"articles": articles,
