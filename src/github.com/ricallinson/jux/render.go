@@ -17,7 +17,10 @@ func debug(maps ...map[string]string) string {
 	return string(debug)
 }
 
-func Render(req *f.Request, res *f.Response, next func(), cfg *AppCfg, app *f.Server) {
+func Render(req *f.Request, res *f.Response, next func()) {
+
+	// Get the AppCfg from the req.Map.
+	cfg := req.Map["cfg"].(*AppCfg)
 
 	// If "juxskip" is set then just reander the requested component.
 	if _, ok := req.Query["juxskip"]; ok {
@@ -58,10 +61,6 @@ func Render(req *f.Request, res *f.Response, next func(), cfg *AppCfg, app *f.Se
 		} else {
 			res.Locals[position] = val // create
 		}
-	}
-
-	if cfg.App.Defaults.Debug {
-		res.Locals["debug"] = debug(app.Locals, res.Locals)
 	}
 
 	// Based on "juxmode" we need to pick a theme.
