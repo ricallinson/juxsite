@@ -10,7 +10,7 @@ func Menu(req *f.Request, res *f.Response, next func()) {
 		return
 	}
 	articles, _ := ListArticles(req, "", 0, 100)
-	res.Render("article/menu.html", map[string][]*Article{
+	res.Render("jux_article/menu.html", map[string][]*Article{
 		"links": articles,
 	}, map[string]string{
 		"title": "All Articles",

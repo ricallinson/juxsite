@@ -33,7 +33,7 @@ func list(req *f.Request, res *f.Response, next func()) {
 			article.Summary = string(blackfriday.MarkdownBasic([]byte(article.Text[:line])))
 		}
 	}
-	res.Render("article/list.html", map[string][]*Article{
+	res.Render("jux_article/list.html", map[string][]*Article{
 		"articles": articles,
 	}, map[string]string{
 		"title": "All Articles",
@@ -57,7 +57,7 @@ func read(req *f.Request, res *f.Response, next func()) {
 	res.Locals["pageTitle"] = article.Title
 	// Render the text as HTML.
 	article.Text = string(blackfriday.MarkdownBasic([]byte(article.Text)))
-	res.Render("article/read.html", map[string][]*Article{
+	res.Render("jux_article/read.html", map[string][]*Article{
 		"articles": []*Article{article},
 	})
 }
