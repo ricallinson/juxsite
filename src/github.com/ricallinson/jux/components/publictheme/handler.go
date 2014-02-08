@@ -5,6 +5,7 @@ import (
 	"github.com/ricallinson/jux/assets"
 )
 
+// Page theme.
 func Template(req *f.Request, res *f.Response, next func()) {
 	asset := assets.New(res.Locals)
 	asset.AddCss("/publictheme/bootstrap/css/bootstrap.min.css")
@@ -13,6 +14,7 @@ func Template(req *f.Request, res *f.Response, next func()) {
 	res.Render("publictheme/main.html")
 }
 
+// Fall back 404 page.
 func FourOFour(req *f.Request, res *f.Response, next func()) {
 	asset := assets.New(res.Locals)
 	asset.AddCss("/publictheme/bootstrap/css/bootstrap.min.css")
