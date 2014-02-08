@@ -86,7 +86,7 @@ func Start(cfg *AppCfg) {
 
 	app.Get("*", func(req *f.Request, res *f.Response, next func()) {
 		req.Query["juxskip"] = "1"
-		req.Params["juxcomp"] = "404"
+		req.Params["juxcomp"] = "public_404"
 		req.Map["cfg"] = cfg
 		Render(req, res, next)
 	})

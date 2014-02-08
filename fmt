@@ -1,6 +1,7 @@
 go fmt ./http
 go fmt ./src/github.com/ricallinson/jux/
 go fmt ./src/github.com/ricallinson/jux/components
+go fmt ./src/github.com/ricallinson/jux/components/menu
 go fmt ./src/github.com/ricallinson/jux/components/notfound
 go fmt ./src/github.com/ricallinson/jux/components/publictheme
 go fmt ./src/github.com/ricallinson/jux/helpers/assets

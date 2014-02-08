@@ -94,10 +94,10 @@ func (this *AppCfg) init() {
 	// Defaults for the application level configuration.
 	this.App.Defaults.Debug = false
 	this.App.Defaults.Env = "development"
-	this.App.Defaults.Theme = "publictheme"
+	this.App.Defaults.Theme = "public_theme" // this is a component
 	this.App.Defaults.Component = "article"
 	this.App.Defaults.ComponentView = "main"
-	this.App.Defaults.AdminTheme = "admintheme"
+	this.App.Defaults.AdminTheme = "admin_theme" // this is a component
 	this.App.Defaults.AdminComponent = "dashboard"
 	this.App.Defaults.AdminComponentView = "main"
 
@@ -106,14 +106,12 @@ func (this *AppCfg) init() {
 
 	// Create the default "public" layout.
 	this.App.Layouts["public"] = map[string][]string{
-		// "position-01": {""}, // Bread crumbs.
-		"position-03": {"a", "article_menu"}, // Menu and Login.
-		// "position-04": {"f"}, // Sample error.
+		"position-03": {"link_menu", "article_menu"}, // Menu and Login.
 	}
 
 	// Create the default "admin" layout.
 	this.App.Layouts["admin"] = map[string][]string{
-	// "position-01": {"f"}, // Sample error.
+		"position-01": {"f"}, // Sample error.
 	}
 
 	// Instantiate the Map of all available components.

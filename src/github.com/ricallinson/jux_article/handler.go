@@ -44,9 +44,10 @@ func list(req *f.Request, res *f.Response, next func()) {
 	res.Render("jux_article/list.html", map[string][]*Article{
 		"articles": articles,
 	}, map[string]string{
-		"title": "All Articles",
-		"less":  strconv.Itoa(less),
-		"more":  strconv.Itoa(more),
+		"title":    "All Articles",
+		"less":     strconv.Itoa(less),
+		"more":     strconv.Itoa(more),
+		"category": category,
 	}, map[string]bool{
 		"show_less": less >= 0,
 		"show_more": more < count,

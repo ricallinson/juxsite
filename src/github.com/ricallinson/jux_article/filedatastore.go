@@ -81,10 +81,13 @@ func (this *FileDataStore) GetTable(table string, category string, from int, to 
 			articles = append(articles, article)
 		}
 	}
+	count := len(articles)
 	if from < 0 {
 		from = 0
 	}
-	count := len(articles)
+	if from > count {
+		from = count - 1
+	}
 	if to > count {
 		to = count
 	}
