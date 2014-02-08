@@ -2,6 +2,7 @@ package article
 
 import (
 	"github.com/ricallinson/forgery"
+	"strconv"
 )
 
 // Route the request to the correct handler function.
@@ -18,11 +19,20 @@ func Handler(req *f.Request, res *f.Response, next func()) {
 
 // Shows a list of articles for the given category.
 func list(req *f.Request, res *f.Response, next func()) {
-	articles := ListArticles(req, 0, 100)
+	batch := 5
+	start, _ := strconv.Atoi(req.Query["start"])
+	articles, count := ListArticles(req, start, start+batch)
+	less := start - batch
+	more := start + batch
 	res.Render("article/list.html", map[string][]*Article{
 		"articles": articles,
 	}, map[string]string{
 		"title": "All Articles",
+		"less":  strconv.Itoa(less),
+		"more":  strconv.Itoa(more),
+	}, map[string]bool{
+		"show_less": less >= 0,
+		"show_more": more < count,
 	})
 }
 

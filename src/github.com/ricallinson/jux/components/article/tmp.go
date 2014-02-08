@@ -8,14 +8,22 @@ import (
 	"strings"
 )
 
-func loadArticles(dirname string, from int, to int) []*Article {
+func loadArticles(dirname string, from int, to int) ([]*Article, int) {
 	articles := []*Article{}
 	list, err := ioutil.ReadDir(dirname)
 	if err != nil {
 		// panic(err)
-		return articles
+		return articles, 0
 	}
-	for _, file := range list {
+	count := len(list)
+	if from < 0 {
+		from = 0
+	}
+	if to > count {
+		to = count
+	}
+	for i := from; i < to; i++ {
+		file := list[i]
 		if file.IsDir() != true {
 			article := &Article{Id: file.Name()}
 			if loadArticle(dirname, article) {
@@ -23,7 +31,7 @@ func loadArticles(dirname string, from int, to int) []*Article {
 			}
 		}
 	}
-	return articles
+	return articles, count
 }
 
 func loadArticle(dirname string, article *Article) bool {
