@@ -1,7 +1,6 @@
 package jux
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/ricallinson/fcomposite"
 	"github.com/ricallinson/forgery"

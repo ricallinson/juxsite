@@ -6,9 +6,7 @@ import (
 	"github.com/ricallinson/forgery"
 )
 
-/*
-   Protect a URL by forcing a login.
-*/
+// Protect a URL by forcing a login.
 func UserAuth(req *f.Request, res *f.Response, next func()) {
 	context := appengine.NewContext(req.Request.Request)
 	u := user.Current(context)
@@ -20,9 +18,7 @@ func UserAuth(req *f.Request, res *f.Response, next func()) {
 	// context.Debugf("User: %v", u.String())
 }
 
-/*
-   Protect a URL by forcing a login.
-*/
+// Protect a URL by forcing a login.
 func AdminAuth(req *f.Request, res *f.Response, next func()) {
 	context := appengine.NewContext(req.Request.Request)
 	u := user.Current(context)
