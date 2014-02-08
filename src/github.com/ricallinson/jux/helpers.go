@@ -22,7 +22,7 @@ func GetPosition(req *f.Request) string {
 	return req.Params["fcomposite_id"][0:PositionSize]
 }
 
-// Return the given interface as a YAML string.
+// Return the given interface as a YAML byte slice.
 func ToYaml(i interface{}) []byte {
 	data, err1 := goyaml.Marshal(i)
 	if err1 != nil {
@@ -32,7 +32,7 @@ func ToYaml(i interface{}) []byte {
 	return data
 }
 
-// Read the given YAML into the given interface.
+// Reads the given YAML byte slice into the given interface.
 func FromYaml(yaml []byte, i interface{}) {
 	// Unmarshal the source into this Config instance.
 	err2 := goyaml.Unmarshal(yaml, i)
@@ -42,7 +42,7 @@ func FromYaml(yaml []byte, i interface{}) {
 	}
 }
 
-// Read the given file and return a byte slice.
+// Reads the given file and return a byte slice.
 func FromFile(filepath string) []byte {
 	// Read the source file.
 	file, err1 := ioutil.ReadFile(filepath)
@@ -53,7 +53,7 @@ func FromFile(filepath string) []byte {
 	return file
 }
 
-// Read the given YAML file into the given interface.
+// Reads the given YAML filepath into the given interface.
 func FromYamlFile(filepath string, i interface{}) {
 	FromYaml(FromFile(filepath), i)
 }
