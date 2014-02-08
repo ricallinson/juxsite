@@ -3,6 +3,7 @@ package article
 import (
 	"github.com/ricallinson/forgery"
 	"strconv"
+	"strings"
 )
 
 // Route the request to the correct handler function.
@@ -21,7 +22,8 @@ func Handler(req *f.Request, res *f.Response, next func()) {
 func list(req *f.Request, res *f.Response, next func()) {
 	batch := 5
 	start, _ := strconv.Atoi(req.Query["start"])
-	articles, count := ListArticles(req, start, start+batch)
+	category := strings.ToLower(req.Query["category"])
+	articles, count := ListArticles(req, category, start, start+batch)
 	less := start - batch
 	more := start + batch
 	res.Render("article/list.html", map[string][]*Article{
@@ -55,6 +57,7 @@ func read(req *f.Request, res *f.Response, next func()) {
 func listJson(req *f.Request, res *f.Response, next func()) {
 	batch := 5
 	start, _ := strconv.Atoi(req.Query["start"])
-	articles, _ := ListArticles(req, start, start+batch)
+	category := strings.ToLower(req.Query["category"])
+	articles, _ := ListArticles(req, category, start, start+batch)
 	res.Json(articles)
 }

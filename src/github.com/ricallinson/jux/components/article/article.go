@@ -14,9 +14,9 @@ type Article struct {
 	Text     string
 }
 
-func ListArticles(req *f.Request, from int, to int) ([]*Article, int) {
+func ListArticles(req *f.Request, category string, from int, to int) ([]*Article, int) {
 	// c := appengine.NewContext(req.Request.Request)
-	return loadArticles("data/articles", from, to)
+	return loadArticles("data/articles", category, from, to)
 }
 
 func (this *Article) Create(req *f.Request) error {

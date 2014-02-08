@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func loadArticles(dirname string, from int, to int) ([]*Article, int) {
+func loadArticles(dirname string, category string, from int, to int) ([]*Article, int) {
 	articles := []*Article{}
 	list, err := ioutil.ReadDir(dirname)
 	if err != nil {
@@ -27,7 +27,9 @@ func loadArticles(dirname string, from int, to int) ([]*Article, int) {
 		if file.IsDir() != true {
 			article := &Article{Id: file.Name()}
 			if loadArticle(dirname, article) {
-				articles = append(articles, article)
+				if category == "" || article.Category == category {
+					articles = append(articles, article)
+				}
 			}
 		}
 	}
