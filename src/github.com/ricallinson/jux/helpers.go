@@ -1,6 +1,7 @@
 package jux
 
 import (
+	"appengine"
 	"github.com/ricallinson/forgery"
 	"io/ioutil"
 	"launchpad.net/goyaml"
@@ -20,6 +21,11 @@ func GetSite(req *f.Request) *Site {
 // Returns the Layout Map position for the current component.
 func GetPosition(req *f.Request) string {
 	return req.Params["fcomposite_id"][0:PositionSize]
+}
+
+// Returns a Google App Engine Context.
+func GetNewContext(req *f.Request) appengine.Context {
+	return appengine.NewContext(req.Request.Request)
 }
 
 // Return the given interface as a YAML byte slice.

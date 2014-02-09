@@ -4,6 +4,7 @@ go fmt ./src/github.com/ricallinson/jux/components
 go fmt ./src/github.com/ricallinson/jux/components/not_found
 go fmt ./src/github.com/ricallinson/jux/components/public_theme
 go fmt ./src/github.com/ricallinson/jux/helpers/assets
+go fmt ./src/github.com/ricallinson/jux/helpers/datastore
 go fmt ./src/github.com/ricallinson/jux/helpers/secure
 go fmt ./src/github.com/ricallinson/jux_article
 go fmt ./src/github.com/ricallinson/jux_link_menu

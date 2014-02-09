@@ -60,7 +60,8 @@ func list(req *f.Request, res *f.Response, next func()) {
 
 // Shows a single article for the given id.
 func read(req *f.Request, res *f.Response, next func()) {
-	article := &Article{Id: req.Query["id"]}
+	article := &Article{}
+	article.Id = req.Query["id"]
 	if article.Id == "" || article.Read(req) != nil {
 		res.Render("notfound/main.html", map[string]string{
 			"error": "Article not found.",

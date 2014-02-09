@@ -3,10 +3,13 @@ package jux_article
 import (
 	"errors"
 	"github.com/ricallinson/forgery"
+	// "github.com/ricallinson/jux"
+	// "github.com/ricallinson/jux/helpers/datastore"
 )
 
 // An Article.
 type Article struct {
+	// datastore.Item
 	Id       string
 	Title    string
 	Category string
