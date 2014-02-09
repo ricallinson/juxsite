@@ -4,13 +4,14 @@ import (
 	"errors"
 	"github.com/ricallinson/forgery"
 	// "github.com/ricallinson/jux"
-	// "github.com/ricallinson/jux/helpers/datastore"
+	"github.com/ricallinson/jux/helpers/datastore"
+	// "reflect"
 )
 
 // An Article.
 type Article struct {
-	// datastore.Item
-	Id       string
+	datastore.Entry
+	// Id       string
 	Title    string
 	Category string
 	Summary  string
@@ -38,6 +39,16 @@ func (this *Article) Read(req *f.Request) error {
 		this.Category = article.Category
 		this.Summary = article.Summary
 		this.Text = article.Text
+
+		// Testing Ideas
+		// ds := datastore.New(jux.GetNewContext(req))
+		// err := ds.Create(this.Id, this)
+		// // Did it go wrong?
+		// if err != nil {
+		// 	this.Title = reflect.TypeOf(this).Elem().Name()
+		// 	this.Text = err.Error()
+		// }
+
 		return nil
 	}
 	return errors.New("Article not found.")

@@ -4,11 +4,12 @@ import (
 	"appengine"
 	"appengine/datastore"
 	"errors"
-	"sort"
-	"time"
+	"reflect"
+	// "sort"
+	// "time"
 )
 
-type Item struct {
+type Entry struct {
 
 	// The path used for the Item.
 	Id string
@@ -17,82 +18,49 @@ type Item struct {
 	Uid string
 
 	// Version as a time stamp
-	Version string
+	Created string
 
+	// Version as a time stamp
+	Updated string
+}
+
+type DataStore struct {
 	// Appengine Context
-	context appengine.Context
-
-	// Key for the datastore
-	key *datastore.Key
+	Context appengine.Context
 }
 
-/*
-   List all the Items.
-*/
-func List(context appengine.Context) (list []string) {
-	var items []Item
-	q := datastore.NewQuery("Item") //.Filter("Uid =", uid)
-	_, err := q.GetAll(context, &items)
-	if err != nil || len(items) == 0 {
-		return
-	}
-	for _, item := range items {
-		list = append(list, item.Id)
-	}
-	sort.Strings(list)
-	return
+func New(context appengine.Context) *DataStore {
+	ds := &DataStore{}
+	ds.Context = context
+	return ds
 }
 
-/*
-   Returns the datastore Key for this Item.
-*/
-func (this *Item) Key(context appengine.Context) *datastore.Key {
-	if this.key != nil {
-		return this.key
-	}
-	var items []Item
-	q := datastore.NewQuery("Item").Filter("Id =", this.Id).Filter("Uid =", this.Uid).Limit(1)
-	keys, err := q.GetAll(context, &items)
-	if err != nil || len(items) == 0 {
-		return &datastore.Key{}
-	}
-	this.key = keys[0]
-	return this.key
+// Create a Key from the interface and id.
+func (this *DataStore) CreateKey(id string, i interface{}) *datastore.Key {
+	return datastore.NewKey(this.Context, reflect.TypeOf(i).Elem().Name(), id, 0, nil)
 }
 
-/*
-   Create the Item in the datastore.
-*/
-func (this *Item) Create(context appengine.Context) error {
-	this.Version = time.Now().UTC().Format(time.RFC1123Z)
-	key, err := datastore.Put(context, datastore.NewIncompleteKey(context, "Item", nil), this)
-	this.key = key
+// Create an Entry in the datastore.
+func (this *DataStore) Create(id string, i interface{}) error {
+	_, err := datastore.Put(this.Context, this.CreateKey(id, i), i)
 	return err
 }
 
-/*
-   Read this Item from the datastore.
-*/
-func (this *Item) Read(context appengine.Context) error {
-	err := datastore.Get(context, this.Key(context), this)
+// Read an Entry from the datastore.
+func (this *DataStore) Read(id string, i interface{}) error {
+	err := datastore.Get(this.Context, this.CreateKey(id, i), i)
 	if err != nil {
-		return errors.New("Item not found")
+		return errors.New("Entry not found.")
 	}
 	return nil
 }
 
-/*
-   Update this Item in the datastore.
-*/
-func (this *Item) Update(context appengine.Context) error {
-	this.Version = time.Now().UTC().Format(time.RFC1123Z)
-	_, err := datastore.Put(context, this.Key(context), this)
-	return err
+// Update an Entry in the datastore.
+func (this *DataStore) Update(id string, i interface{}) error {
+	return this.Create(id, i)
 }
 
-/*
-   Delete this Item from the datastore.
-*/
-func (this *Item) Delete(context appengine.Context) error {
-	return datastore.Delete(context, this.Key(context))
+// Delete an Entry from the datastore.
+func (this *DataStore) Delete(id string, i interface{}) error {
+	return datastore.Delete(this.Context, this.CreateKey(id, i))
 }
