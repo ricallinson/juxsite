@@ -18,7 +18,7 @@ type JsonArticle struct {
 }
 
 // Read all files in the given directory and store them in the DataStore.
-func LoadJsonArticles(req *f.Request, dirname string) {
+func LoadJsonArticles(req *f.Request, dirname string) error {
 	ds := datastore.New(jux.GetNewContext(req))
 	list, err := ioutil.ReadDir(dirname)
 	if err != nil {
@@ -34,12 +34,13 @@ func LoadJsonArticles(req *f.Request, dirname string) {
 				article.Category = source.Category
 				article.Text = []byte(source.Text)
 				if err := ds.Create(article); err != nil {
-					panic(err.Error())
+					return err
 				}
 			}
 		}
-		time.Sleep(time.Second * 2)
+		time.Sleep(time.Second * 1)
 	}
+	return nil
 }
 
 // Read the JSON file at given "filepath" into a &JsonArticle{}.

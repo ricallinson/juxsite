@@ -153,9 +153,11 @@ func Menu(req *f.Request, res *f.Response, next func()) {
 	})
 }
 
-// Shows a JSON Object that is a list of articles for the given category.
+// Used to prime the datastore.
 func primer(req *f.Request, res *f.Response, next func()) {
-	// Used to prime the datastore.
-	LoadJsonArticles(req, "data/articles")
+	if err := LoadJsonArticles(req, "data/articles"); err != nil {
+		res.End(err.Error())
+		return
+	}
 	res.End("Primer complete.")
 }
