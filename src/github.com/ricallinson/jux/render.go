@@ -15,6 +15,49 @@ const (
 	JuxView          = "juxview"
 )
 
+// Given a map select the layout to use and return an fcomposite.Map{}.
+func selectLayout(params map[string]string, site *Site) fcomposite.Map {
+
+	// Based on "juxmode" we need to pick a layout.
+	layout := site.GetLayout(params[JuxMode])
+	layout["maincontent"] = []string{params[JuxComp]}
+	composite := fcomposite.Map{}
+	count := 0
+
+	// Walk over the layout and fill the fcomposite.Map{}.
+	for pos, names := range layout {
+		for _, name := range names {
+			composite[pos+strconv.Itoa(count)] = site.GetComponent(name)
+			count++
+		}
+	}
+	return composite
+}
+
+// Given a Config object select the theme to use and return it as a string.
+func selectTheme(mode string, config *Config) string {
+
+	// Based on "juxmode" we need to pick a theme.
+	if mode == "admin" {
+		return config.Defaults.AdminTheme
+	}
+
+	return config.Defaults.Theme
+}
+
+// Collapse the items positions back into their layout positions.
+func collapseLayout(in map[string]string, out map[string]string) {
+
+	for key, val := range in {
+		position := key[:PositionSize] // position-01(00)
+		if _, ok := out[position]; ok {
+			out[position] += val // append
+		} else {
+			out[position] = val // create
+		}
+	}
+}
+
 // Query parameters that effect the final rendered output.
 //
 // juxmode - Either "public" or "admin".
@@ -34,38 +77,17 @@ func Render(req *f.Request, res *f.Response, next func()) {
 		return
 	}
 
-	// Based on "juxmode" we need to pick a layout.
-	layout := site.GetLayout(req.Params[JuxMode])
-	layout["maincontent"] = []string{req.Params[JuxComp]}
-	composite := fcomposite.Map{}
-	count := 0
-
-	// Walk over the layout and fill the fcomposite.Map{}.
-	for pos, names := range layout {
-		for _, name := range names {
-			composite[pos+strconv.Itoa(count)] = site.GetComponent(name)
-			count++
-		}
-	}
+	// Select a layout to use for this request.
+	composite := selectLayout(req.Params, site)
 
 	// Dispatch the fcomposite.Map{}.
 	data := composite.Dispatch(req, res, next)
 
-	// Collapse the dispatched positions back into their layout positions.
-	for key, val := range data {
-		position := key[:PositionSize] // position-01(00)
-		if _, ok := res.Locals[position]; ok {
-			res.Locals[position] += val // append
-		} else {
-			res.Locals[position] = val // create
-		}
-	}
+	// Collapse the dispathed layout in the Locals map.
+	collapseLayout(data, res.Locals)
 
-	// Based on "juxmode" we need to pick a theme.
-	theme := site.Config.Defaults.Theme
-	if req.Params[JuxMode] == "admin" {
-		theme = site.Config.Defaults.AdminTheme
-	}
+	// Select the theme to use.
+	theme := selectTheme(req.Params[JuxMode], site.Config)
 
 	// Render the final component.
 	site.Components[theme](req, res, next)
