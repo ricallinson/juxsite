@@ -1,13 +1,13 @@
 <div>
-    <h2>{{title}}</h2>
-    {{#articles}}
+    <h2>{{Title}}</h2>
+    {{#Articles}}
     <div>
         <h3><a href="/article/read?id={{Id}}&amp;category={{Category}}">{{Title}}</a> <small>{{Category}}</small></h3>
         <p>{{{Summary}}}</p>
     </div>
-    {{/articles}}
+    {{/Articles}}
     <div class="paging">
-        {{#show_less}}<a type="button" class="btn btn-default" href="/article?start={{less}}&amp;category={{category}}">Less</a>{{/show_less}}
-        {{#show_more}}<a type="button" class="btn btn-default pull-right" href="/article?start={{more}}&amp;category={{category}}">More</a>{{/show_more}}
+        {{#Show_less}}<a type="button" class="btn btn-default" href="/article?start={{Less}}&amp;category={{Category}}">Less</a>{{/Show_less}}
+        {{#Show_more}}<a type="button" class="btn btn-default pull-right" href="/article?start={{More}}&amp;category={{Category}}">More</a>{{/Show_more}}
     </div>
 </div>

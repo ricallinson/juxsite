@@ -1,67 +1,31 @@
 package jux_article
 
 import (
-	"errors"
-	"github.com/ricallinson/forgery"
-	// "github.com/ricallinson/jux"
+	"bytes"
 	"github.com/ricallinson/jux/helpers/datastore"
-	// "reflect"
+	"github.com/russross/blackfriday"
 )
 
 // An Article.
 type Article struct {
 	datastore.Entry
-	// Id       string
 	Title    string
 	Category string
-	Summary  string
-	Text     string
+	Text     []byte
+	Summary  string `datastore:"-"` // This value is NOT added to the datastore.
+	Body     string `datastore:"-"` // This value is NOT added to the datastore.
 }
 
-// Returns a list of all items in the given "table".
-func ListArticles(req *f.Request, category string, from int, to int) ([]*Article, int) {
-	ds := GetFileDataStore(req, "data")
-	return ds.GetTable("articles", category, from, to)
-}
-
-// Store a this Article in persistent storage.
-func (this *Article) Create(req *f.Request) error {
-	panic("Not implemented.")
-	return nil
-}
-
-// Read a this Article from persistent storage.
-func (this *Article) Read(req *f.Request) error {
-	ds := GetFileDataStore(req, "data")
-	if article, ok := ds.GetItem("articles", this.Id); ok {
-		// This is a hack, need to work out why "this = article" fails.
-		this.Title = article.Title
-		this.Category = article.Category
-		this.Summary = article.Summary
-		this.Text = article.Text
-
-		// Testing Ideas
-		// ds := datastore.New(jux.GetNewContext(req))
-		// err := ds.Create(this.Id, this)
-		// // Did it go wrong?
-		// if err != nil {
-		// 	this.Title = reflect.TypeOf(this).Elem().Name()
-		// 	this.Text = err.Error()
-		// }
-
-		return nil
+// Fill in Summary and Body values from the Text byte slice.
+func (this *Article) InflateSummary() {
+	line := bytes.Index(this.Text, []byte("\r\n"))
+	if line == -1 {
+		line = len(this.Text)
 	}
-	return errors.New("Article not found.")
+	this.Summary = string(blackfriday.MarkdownBasic(this.Text[:line]))
 }
 
-// Update a this Article in persistent storage.
-func (this *Article) Update(req *f.Request) error {
-	panic("Not implemented.")
-	return nil
-}
-
-// Remove a this Article from persistent storage.
-func (this *Article) Delete(req *f.Request) error {
-	panic("Not implemented.")
-	return nil
+// Fill in Summary and Body values from the Text byte slice.
+func (this *Article) InflateBody() {
+	this.Body = string(blackfriday.MarkdownBasic(this.Text))
 }

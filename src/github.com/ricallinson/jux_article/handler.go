@@ -2,8 +2,9 @@ package jux_article
 
 import (
 	"github.com/ricallinson/forgery"
+	"github.com/ricallinson/jux"
 	"github.com/ricallinson/jux/helpers/assets"
-	"github.com/russross/blackfriday"
+	"github.com/ricallinson/jux/helpers/datastore"
 	"strconv"
 	"strings"
 )
@@ -22,76 +23,130 @@ func Handler(req *f.Request, res *f.Response, next func()) {
 
 // Shows a list of articles for the given category.
 func list(req *f.Request, res *f.Response, next func()) {
+
 	// Should this be in a config?
 	asset := assets.New(res.Locals)
 	asset.AddCss("/jux_article/css/screen.css")
+
 	// First fetch all the params needed.
 	batch := 5
 	start, _ := strconv.Atoi(req.Query["start"])
 	category := strings.ToLower(req.Query["category"])
+
 	// If "category" is empty check the config.
 	if len(category) == 0 {
 		category = "general"
 	}
+
+	// Create a Query.
+	query := &Article{
+		Category: category,
+	}
+	articles := []*Article{}
+
+	// Grab the datastore.
+	ds := datastore.New(jux.GetNewContext(req))
+
 	// Get the list of articles matching the request.
-	articles, count := ListArticles(req, category, start, start+batch)
+	ds.List(query, start, batch, &articles)
+
+	// Calculate the previous/next links.
 	less := start - batch
 	more := start + batch
+
 	// Render the Summary as HTML.
 	for _, article := range articles {
-		line := strings.Index(article.Text, "\r\n")
-		if line == -1 {
-			line = len(article.Text)
-		}
-		article.Summary = string(blackfriday.MarkdownBasic([]byte(article.Text[:line])))
+		article.InflateSummary()
 	}
 	res.Render("jux_article/list.html", map[string][]*Article{
-		"articles": articles,
+		"Articles": articles,
 	}, map[string]string{
-		"title":    "All Articles",
-		"less":     strconv.Itoa(less),
-		"more":     strconv.Itoa(more),
-		"category": category,
+		"Title":    "All Articles",
+		"Less":     strconv.Itoa(less),
+		"More":     strconv.Itoa(more),
+		"Category": category,
 	}, map[string]bool{
-		"show_less": less >= 0,
-		"show_more": more < count,
+		"Show_less": less >= 0,
+		"Show_more": batch == len(articles),
 	})
 }
 
 // Shows a single article for the given id.
 func read(req *f.Request, res *f.Response, next func()) {
+
+	// Create a Query.
 	article := &Article{}
 	article.Id = req.Query["id"]
-	if article.Id == "" || article.Read(req) != nil {
+
+	// Grab the datastore.
+	ds := datastore.New(jux.GetNewContext(req))
+	if err := ds.Read(article); err != nil {
 		res.Render("notfound/main.html", map[string]string{
 			"error": "Article not found.",
 		})
 		return
 	}
+
+	// Inflate the Article.
+	article.InflateBody()
+
+	// Render the Article.
 	res.Locals["pageTitle"] = article.Title
-	// Render the text as HTML.
-	article.Text = string(blackfriday.MarkdownBasic([]byte(article.Text)))
 	res.Render("jux_article/read.html", map[string][]*Article{
-		"articles": []*Article{article},
+		"Articles": []*Article{article},
 	})
 }
 
 // Shows a JSON Object that is a list of articles for the given category.
 func listJson(req *f.Request, res *f.Response, next func()) {
-	batch := 5
+
+	// Used to prime the datastore.
+	LoadJsonArticles(req, "data/articles")
+
+	// Process query params.
 	start, _ := strconv.Atoi(req.Query["start"])
 	category := strings.ToLower(req.Query["category"])
-	articles, _ := ListArticles(req, category, start, start+batch)
+
+	// Create a Query.
+	query := &Article{
+		Category: category,
+	}
+	articles := []*Article{}
+
+	// Grab the datastore.
+	ds := datastore.New(jux.GetNewContext(req))
+	if err := ds.List(query, start, -1, &articles); err != nil {
+		panic(err.Error())
+	}
+
+	// Inflate the Article.
+	for _, article := range articles {
+		article.InflateSummary()
+		article.InflateBody()
+	}
+
+	// Render as Json.
 	res.Json(articles)
 }
 
-// Route the request to the correct handler function.
+// Shows a menu of articles for the given category.
 func Menu(req *f.Request, res *f.Response, next func()) {
+
 	if req.Params["juxview"] != "article" && req.Params["juxview"] != "read" {
 		return
 	}
-	category := req.Query["category"]
-	articles, _ := ListArticles(req, category, 0, 100)
+
+	// Create a Query.
+	query := &Article{
+		Category: req.Query["category"],
+	}
+	articles := []*Article{}
+
+	// Grab the datastore.
+	ds := datastore.New(jux.GetNewContext(req))
+	ds.List(query, 0, -1, &articles)
+
+	// Render.
 	res.Render("jux_article/menu.html", map[string][]*Article{
 		"links": articles,
 	}, map[string]string{
