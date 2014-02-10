@@ -20,7 +20,12 @@ func GetSite(req *f.Request) *Site {
 
 // Returns the Layout Map position for the current component.
 func GetPosition(req *f.Request) string {
-	return req.Params["fcomposite_id"][0:PositionSize]
+	if pos, ok := req.Params["fcomposite_id"]; ok {
+		if len(pos) >= PositionSize {
+			return pos[0:PositionSize]
+		}
+	}
+	return ""
 }
 
 // Returns a Google App Engine Context.

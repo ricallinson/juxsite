@@ -7,6 +7,7 @@ import (
 )
 
 func Handler(req *f.Request, res *f.Response, next func()) {
+
 	cfg := Config{}
 	jux.GetSite(req).GetConfig("jux_link_menu", &cfg)
 
