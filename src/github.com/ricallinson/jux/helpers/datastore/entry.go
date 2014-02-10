@@ -33,7 +33,9 @@ type DataStore struct {
 func New(context appengine.Context) *DataStore {
 	ds := &DataStore{}
 	ds.Context = context
-	ds.Uid = user.Current(context).ID
+	if user := user.Current(context); user != nil {
+		ds.Uid = user.ID
+	}
 	return ds
 }
 

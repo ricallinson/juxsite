@@ -18,6 +18,8 @@ func Handler(req *f.Request, res *f.Response, next func()) {
 		read(req, res, next)
 	case "listjson":
 		listJson(req, res, next)
+	case "primer":
+		primer(req, res, next)
 	}
 }
 
@@ -100,9 +102,6 @@ func read(req *f.Request, res *f.Response, next func()) {
 // Shows a JSON Object that is a list of articles for the given category.
 func listJson(req *f.Request, res *f.Response, next func()) {
 
-	// Used to prime the datastore.
-	LoadJsonArticles(req, "data/articles")
-
 	// Process query params.
 	start, _ := strconv.Atoi(req.Query["start"])
 	category := strings.ToLower(req.Query["category"])
@@ -152,4 +151,11 @@ func Menu(req *f.Request, res *f.Response, next func()) {
 	}, map[string]string{
 		"title": "Category Articles",
 	})
+}
+
+// Shows a JSON Object that is a list of articles for the given category.
+func primer(req *f.Request, res *f.Response, next func()) {
+	// Used to prime the datastore.
+	LoadJsonArticles(req, "data/articles")
+	res.End("Primer complete.")
 }
