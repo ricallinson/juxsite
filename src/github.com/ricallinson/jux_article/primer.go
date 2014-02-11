@@ -38,7 +38,7 @@ func LoadJsonArticles(req *f.Request, dirname string) error {
 				}
 			}
 		}
-		time.Sleep(time.Second * 1)
+		time.Sleep(time.Second)
 	}
 	return nil
 }
@@ -57,4 +57,29 @@ func ReadJsonArticle(filepath string) (*JsonArticle, bool) {
 		return article, false
 	}
 	return article, true
+}
+
+// Add the listed categories to the DataStore.
+func LoadCategories(req *f.Request) error {
+
+	// Grab the data store.
+	ds := datastore.New(jux.GetNewContext(req))
+
+	// Get the Category title.
+	categories := map[string]string{
+		"general": "General",
+		"alice": "Alice's Adventures in Wonderland",
+	}
+
+	// Walk over the categories and add them to the store.
+	for key, value := range categories {
+		category := &Category{}
+		category.Id = key
+		category.Title = value
+		if err := ds.Create(category); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

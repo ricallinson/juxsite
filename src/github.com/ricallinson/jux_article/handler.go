@@ -63,7 +63,7 @@ func list(req *f.Request, res *f.Response, next func()) {
 	res.Render("jux_article/list.html", map[string][]*Article{
 		"Articles": articles,
 	}, map[string]string{
-		"Title":    "All Articles",
+		"Title":    LookUpCategory(req, category, "Articles"),
 		"Less":     strconv.Itoa(less),
 		"More":     strconv.Itoa(more),
 		"Category": category,
@@ -156,6 +156,10 @@ func Menu(req *f.Request, res *f.Response, next func()) {
 // Used to prime the datastore.
 func primer(req *f.Request, res *f.Response, next func()) {
 	if err := LoadJsonArticles(req, "data/articles"); err != nil {
+		res.End(err.Error())
+		return
+	}
+	if err := LoadCategories(req); err != nil {
 		res.End(err.Error())
 		return
 	}

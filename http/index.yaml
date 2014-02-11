@@ -14,3 +14,8 @@ indexes:
   properties:
   - name: Category
   - name: Created
+
+- kind: Category
+  properties:
+  - name: Category
+  - name: Created
