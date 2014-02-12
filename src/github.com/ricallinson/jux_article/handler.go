@@ -56,6 +56,13 @@ func list(req *f.Request, res *f.Response, next func()) {
 	less := start - batch
 	more := start + batch
 
+if cats, err := GetCategories(req); err == nil {
+	res.Json(cats)
+} else {
+	res.End(err.Error())
+}
+return
+
 	// Render the Summary as HTML.
 	for _, article := range articles {
 		article.InflateSummary()
