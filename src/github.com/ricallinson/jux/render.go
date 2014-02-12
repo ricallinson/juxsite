@@ -66,7 +66,7 @@ func collapseLayout(in map[string]string, out map[string]string) {
 // juxskip - Skip rendering the layout and render only the requested "juxcomp" & "juxview".
 //
 // Render the requested layout wrapped using a theme.
-func Render(req *f.Request, res *f.Response, next func()) {
+func render(req *f.Request, res *f.Response, next func()) {
 
 	// Get the Config from the req.Map.
 	site := req.Map[JuxSite].(*Site)

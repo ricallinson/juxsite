@@ -19,5 +19,5 @@ layouts:
     - f
   public:
     position-03:
-    - link_menu
-    - article_menu
+    - article_menu_categories
+    - article_menu_articles

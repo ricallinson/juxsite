@@ -6,7 +6,7 @@ import (
 )
 
 // Page theme.
-func Template(req *f.Request, res *f.Response, next func()) {
+func Handler(req *f.Request, res *f.Response, next func()) {
 	asset := assets.New(res.Locals)
 	asset.AddCss("/public_theme/bootstrap/css/bootstrap.min.css")
 	asset.AddCss("/public_theme/css/screen.css")
@@ -15,7 +15,7 @@ func Template(req *f.Request, res *f.Response, next func()) {
 }
 
 // Fall back 404 page.
-func FourOFour(req *f.Request, res *f.Response, next func()) {
+func HandlerFourOFour(req *f.Request, res *f.Response, next func()) {
 	asset := assets.New(res.Locals)
 	asset.AddCss("/public_theme/bootstrap/css/bootstrap.min.css")
 	asset.AddCss("/public_theme/css/screen.css")

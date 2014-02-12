@@ -48,20 +48,20 @@ func listen(site *Site) {
 		req.Params[JuxComp] = site.Config.Defaults.AdminComponent
 		req.Params[JuxView] = site.Config.Defaults.AdminComponentView
 		req.Map[JuxSite] = site
-		Render(req, res, next)
+		render(req, res, next)
 	})
 
 	app.Get("/admin/:juxcomp", secure.AdminAuth, func(req *f.Request, res *f.Response, next func()) {
 		req.Params[JuxMode] = "admin"
 		req.Params[JuxView] = site.Config.Defaults.AdminComponentView
 		req.Map[JuxSite] = site
-		Render(req, res, next)
+		render(req, res, next)
 	})
 
 	app.Get("/admin/:juxcomp/:juxview", secure.AdminAuth, func(req *f.Request, res *f.Response, next func()) {
 		req.Params[JuxMode] = "admin"
 		req.Map[JuxSite] = site
-		Render(req, res, next)
+		render(req, res, next)
 	})
 
 	app.Get("/", func(req *f.Request, res *f.Response, next func()) {
@@ -69,27 +69,27 @@ func listen(site *Site) {
 		req.Params[JuxComp] = site.Config.Defaults.Component
 		req.Params[JuxView] = site.Config.Defaults.ComponentView
 		req.Map[JuxSite] = site
-		Render(req, res, next)
+		render(req, res, next)
 	})
 
 	app.Get("/:juxcomp", func(req *f.Request, res *f.Response, next func()) {
 		req.Params[JuxMode] = "public"
 		req.Params[JuxView] = site.Config.Defaults.ComponentView
 		req.Map[JuxSite] = site
-		Render(req, res, next)
+		render(req, res, next)
 	})
 
 	app.Get("/:juxcomp/:juxview", func(req *f.Request, res *f.Response, next func()) {
 		req.Params[JuxMode] = "public"
 		req.Map[JuxSite] = site
-		Render(req, res, next)
+		render(req, res, next)
 	})
 
 	app.Get("*", func(req *f.Request, res *f.Response, next func()) {
 		req.Query[JuxSkip] = "1"
 		req.Params[JuxComp] = "public_404"
 		req.Map[JuxSite] = site
-		Render(req, res, next)
+		render(req, res, next)
 	})
 
 	// Handle the application.

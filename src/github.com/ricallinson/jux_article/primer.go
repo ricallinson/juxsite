@@ -68,13 +68,14 @@ func LoadCategories(req *f.Request) error {
 	// Get the Category title.
 	categories := map[string]string{
 		"general": "General",
-		"alice": "Alice's Adventures in Wonderland",
+		"alice":   "Alice's Adventures in Wonderland",
 	}
 
 	// Walk over the categories and add them to the store.
 	for key, value := range categories {
 		category := &Category{}
 		category.Id = key
+		category.Category = key
 		category.Title = value
 		if err := ds.Create(category); err != nil {
 			return err

@@ -23,6 +23,19 @@ func Handler(req *f.Request, res *f.Response, next func()) {
 	}
 }
 
+// Used to prime the datastore.
+func primer(req *f.Request, res *f.Response, next func()) {
+	if err := LoadJsonArticles(req, "data/articles"); err != nil {
+		res.End(err.Error())
+		return
+	}
+	if err := LoadCategories(req); err != nil {
+		res.End(err.Error())
+		return
+	}
+	res.End("Primer complete.")
+}
+
 // Shows a list of articles for the given category.
 func list(req *f.Request, res *f.Response, next func()) {
 
@@ -40,17 +53,7 @@ func list(req *f.Request, res *f.Response, next func()) {
 		category = "general"
 	}
 
-	// Create a Query.
-	query := &Article{
-		Category: category,
-	}
-	articles := []*Article{}
-
-	// Grab the datastore.
-	ds := datastore.New(jux.GetNewContext(req))
-
-	// Get the list of articles matching the request.
-	ds.List(query, start, batch, &articles)
+	articles, _ := GetArticles(req, category, start, batch)
 
 	// Calculate the previous/next links.
 	less := start - batch
@@ -106,15 +109,9 @@ func listJson(req *f.Request, res *f.Response, next func()) {
 	start, _ := strconv.Atoi(req.Query["start"])
 	category := strings.ToLower(req.Query["category"])
 
-	// Create a Query.
-	query := &Article{
-		Category: category,
-	}
-	articles := []*Article{}
+	articles, err := GetArticles(req, category, start, -1)
 
-	// Grab the datastore.
-	ds := datastore.New(jux.GetNewContext(req))
-	if err := ds.List(query, start, -1, &articles); err != nil {
+	if err != nil {
 		panic(err.Error())
 	}
 
@@ -129,39 +126,31 @@ func listJson(req *f.Request, res *f.Response, next func()) {
 }
 
 // Shows a menu of articles for the given category.
-func Menu(req *f.Request, res *f.Response, next func()) {
+func HandlerMenuCategories(req *f.Request, res *f.Response, next func()) {
+
+	categories, _ := GetCategories(req)
+
+	// Render.
+	res.Render("jux_article/menu_categories.html", map[string][]*Category{
+		"links": categories,
+	}, map[string]string{
+		"title": "Categories",
+	})
+}
+
+// Shows a menu of articles for the given category.
+func HandlerMenuArticles(req *f.Request, res *f.Response, next func()) {
 
 	if req.Params["juxview"] != "article" && req.Params["juxview"] != "read" {
 		return
 	}
 
-	// Create a Query.
-	query := &Article{
-		Category: req.Query["category"],
-	}
-	articles := []*Article{}
-
-	// Grab the datastore.
-	ds := datastore.New(jux.GetNewContext(req))
-	ds.List(query, 0, -1, &articles)
+	articles, _ := GetArticles(req, req.Query["category"], 0, -1)
 
 	// Render.
-	res.Render("jux_article/menu.html", map[string][]*Article{
+	res.Render("jux_article/menu_articles.html", map[string][]*Article{
 		"links": articles,
 	}, map[string]string{
 		"title": "Category Articles",
 	})
-}
-
-// Used to prime the datastore.
-func primer(req *f.Request, res *f.Response, next func()) {
-	if err := LoadJsonArticles(req, "data/articles"); err != nil {
-		res.End(err.Error())
-		return
-	}
-	if err := LoadCategories(req); err != nil {
-		res.End(err.Error())
-		return
-	}
-	res.End("Primer complete.")
 }

@@ -1,7 +1,10 @@
 package jux_article
 
 import (
+	ds "appengine/datastore"
 	"bytes"
+	"github.com/ricallinson/forgery"
+	"github.com/ricallinson/jux"
 	"github.com/ricallinson/jux/helpers/datastore"
 	"github.com/russross/blackfriday"
 )
@@ -28,4 +31,21 @@ func (this *Article) InflateSummary() {
 // Fill in Summary and Body values from the Text byte slice.
 func (this *Article) InflateBody() {
 	this.Body = string(blackfriday.MarkdownBasic(this.Text))
+}
+
+// Return a list of articles matching the given category.
+func GetArticles(req *f.Request, category string, offset int, limit int) ([]*Article, error) {
+
+	articles := []*Article{}
+
+	// Create a query for the given interface.
+	query := ds.NewQuery("Article").
+		Filter("Category =", category).
+		Order("Created").
+		Offset(offset).
+		Limit(limit)
+
+	_, err := query.GetAll(jux.GetNewContext(req), &articles)
+
+	return articles, err
 }

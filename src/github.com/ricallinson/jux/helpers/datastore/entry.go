@@ -39,23 +39,6 @@ func New(context appengine.Context) *DataStore {
 	return ds
 }
 
-func (this *DataStore) List(i interface{}, offset int, limit int, list interface{}) error {
-
-	// Grab a handle to the value.
-	value := reflect.ValueOf(i).Elem()
-
-	// Create a query for the given interface.
-	query := datastore.NewQuery(reflect.TypeOf(i).Elem().Name()).
-		Filter("Category =", value.FieldByName("Category").String()).
-		Order("Created").
-		Offset(offset).
-		Limit(limit)
-
-	// Run the query.
-	_, err := query.GetAll(this.Context, list)
-	return err
-}
-
 func (this *DataStore) Validate(i interface{}) error {
 	entry := reflect.ValueOf(i).Elem()
 	if entry.FieldByName("Id").String() == "" {
