@@ -1,6 +1,7 @@
 package jux_article
 
 import (
+    "appengine/datastore"
     "github.com/ricallinson/forgery"
     "github.com/ricallinson/jux"
     "github.com/ricallinson/jux/helpers/datastore"
@@ -11,24 +12,28 @@ type Category struct {
     Title string
 }
 
-func GetCategories(req *f.Request) []*Category {
+func GetCategories(req *f.Request) []*Category, err {
 
     // Create a Query.
     query := &Category{}
     categories := []*Category{}
 
-    // Grab the datastore.
-    ds := datastore.New(jux.GetNewContext(req))
-    ds.List(query, 0, -1, &categories)
+    // ds := datastore.New(jux.GetNewContext(req))
+    // ds.List(query, 0, -1, &categories)
 
-    return categories
+    query := datastore.NewQuery("Category")
+    _, err := query.GetAll(jux.GetNewContext(req), categories)
+
+    return categories, err
 }
 
 func GetCategoriesMap(req *f.Request) map[string]string {
 
     categories := map[string]string{}
 
-    for _, category := range GetCategories(req) {
+    list, _ := GetCategories(req)
+
+    for _, category := range list {
         categories[category.Id] = category.Title
     }
 
