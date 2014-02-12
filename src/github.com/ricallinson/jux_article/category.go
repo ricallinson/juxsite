@@ -17,7 +17,7 @@ func GetCategories(req *f.Request) ([]*Category, error) {
     categories := []*Category{}
 
     // I would like to use datastore.DataStore.List() here.
-    query := ds.NewQuery("Category").Limit(1)
+    query := ds.NewQuery("Category")
     _, err := query.GetAll(jux.GetNewContext(req), &categories)
 
     return categories, err
