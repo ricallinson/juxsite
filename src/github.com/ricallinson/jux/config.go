@@ -12,14 +12,10 @@ type Config struct {
 
 	// Application level configuration keys.
 	Defaults struct {
-		Env                string
-		Debug              bool
-		Theme              string
-		Component          string
-		ComponentView      string
-		AdminTheme         string
-		AdminComponent     string
-		AdminComponentView string
+		Env         string
+		Debug       bool
+		PublicTheme string
+		AdminTheme  string
 	}
 
 	// Map of all usable layouts.

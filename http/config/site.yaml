@@ -7,17 +7,17 @@ page:
 defaults:
   env: development
   debug: false
-  theme: public_theme
-  component: article
-  componentview: main
+  publictheme: public_theme
   admintheme: admin_theme
-  admincomponent: dashboard
-  admincomponentview: main
 layouts:
   admin:
     position-01:
     - f
+    maincontent:
+    - dashboard
   public:
+    maincontent:
+    - article
     position-03:
     - article_menu_categories
     - article_menu_articles

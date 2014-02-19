@@ -20,7 +20,10 @@ func selectLayout(params map[string]string, site *Site) fcomposite.Map {
 
 	// Based on "juxmode" we need to pick a layout.
 	layout := site.GetLayout(params[JuxMode])
-	layout["maincontent"] = []string{params[JuxComp]}
+	// If we were given a component then replace "maincontent" with it.
+	if len(params[JuxComp]) > 0 {
+		layout["maincontent"] = []string{params[JuxComp]}
+	}
 	composite := fcomposite.Map{}
 	count := 0
 
@@ -42,7 +45,7 @@ func selectTheme(mode string, config *Config) string {
 		return config.Defaults.AdminTheme
 	}
 
-	return config.Defaults.Theme
+	return config.Defaults.PublicTheme
 }
 
 // Collapse the items positions back into their layout positions.

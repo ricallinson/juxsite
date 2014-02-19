@@ -12,12 +12,12 @@ import (
 // Route the request to the correct handler function.
 func Handler(req *f.Request, res *f.Response, next func()) {
 	switch req.Params["juxview"] {
-	case "main":
+	default:
 		list(req, res, next)
 	case "read":
 		read(req, res, next)
 	case "listjson":
-		listJson(req, res, next)
+		list_json(req, res, next)
 	case "primer":
 		primer(req, res, next)
 	}
@@ -103,7 +103,7 @@ func read(req *f.Request, res *f.Response, next func()) {
 }
 
 // Shows a JSON Object that is a list of articles for the given category.
-func listJson(req *f.Request, res *f.Response, next func()) {
+func list_json(req *f.Request, res *f.Response, next func()) {
 
 	// Process query params.
 	start, _ := strconv.Atoi(req.Query["start"])

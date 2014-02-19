@@ -45,15 +45,12 @@ func listen(site *Site) {
 
 	app.Get("/admin", secure.AdminAuth, func(req *f.Request, res *f.Response, next func()) {
 		req.Params[JuxMode] = "admin"
-		req.Params[JuxComp] = site.Config.Defaults.AdminComponent
-		req.Params[JuxView] = site.Config.Defaults.AdminComponentView
 		req.Map[JuxSite] = site
 		render(req, res, next)
 	})
 
 	app.Get("/admin/:juxcomp", secure.AdminAuth, func(req *f.Request, res *f.Response, next func()) {
 		req.Params[JuxMode] = "admin"
-		req.Params[JuxView] = site.Config.Defaults.AdminComponentView
 		req.Map[JuxSite] = site
 		render(req, res, next)
 	})
@@ -66,15 +63,12 @@ func listen(site *Site) {
 
 	app.Get("/", func(req *f.Request, res *f.Response, next func()) {
 		req.Params[JuxMode] = "public"
-		req.Params[JuxComp] = site.Config.Defaults.Component
-		req.Params[JuxView] = site.Config.Defaults.ComponentView
 		req.Map[JuxSite] = site
 		render(req, res, next)
 	})
 
 	app.Get("/:juxcomp", func(req *f.Request, res *f.Response, next func()) {
 		req.Params[JuxMode] = "public"
-		req.Params[JuxView] = site.Config.Defaults.ComponentView
 		req.Map[JuxSite] = site
 		render(req, res, next)
 	})
